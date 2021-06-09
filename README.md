@@ -2,26 +2,11 @@
 杭科院动植物名录小程序
 
 **简介**:
-
+这是一个展示学校内动植物信息的小程序后端
 
 **HOST**:localhost:8181
 
-
-**联系人**:xx@qq.com
-
-
 **Version**:1.0
-
-
-**接口路径**:/v2/api-docs?group=2.X版本
-
-
-[TOC]
-
-
-
-
-
 
 # animals-controller
 
