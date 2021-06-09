@@ -1,0 +1,19 @@
+server:
+  port: 8181
+  servlet:
+    context-path: /directory
+
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-value: 1 #逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0  # 逻辑未删除值(默认为 0)
+      logic-delete-field: flag #全局逻辑删除字段值
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url:  jdbc:mysql://47.118.66.86:3306/directory
+    username: hutao
+    password: Tfj@27599
+    driver-class-name: com.mysql.cj.jdbc.Driver
