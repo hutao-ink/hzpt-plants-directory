@@ -13,9 +13,9 @@ mybatis-plus:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url:  jdbc:mysql://47.118.66.86:3306/directory?serverTimezone=Asia/Shanghai
-    username: hutao
-    password: Tfj@27599
+    url:  jdbc:mysql://ip/directory?serverTimezone=Asia/Shanghai
+    username: 
+    password: 
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 wx:
