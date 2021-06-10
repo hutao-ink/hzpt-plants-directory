@@ -7,6 +7,7 @@ import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.entity.po.Genus;
 import hzpt.plants.directory.entity.po.Plants;
 import hzpt.plants.directory.entity.po.Species;
+import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
 import hzpt.plants.directory.mapper.BranchMapper;
 import hzpt.plants.directory.mapper.GenusMapper;
@@ -69,8 +70,8 @@ class HzptPlantsDirectoryApplicationTests {
      */
     @Test
     public void insertGenus(){
-        List<Genus> genusList=new ArrayList<>(6);
-        for (int i = 0; i < 6; i++) {
+        List<Genus> genusList=new ArrayList<>(20);
+        for (int i = 0; i < 20; i++) {
             Genus genus=new Genus();
             genus.setId(IdUtil.simpleUUID());
             genus.setCreateTime(new Date());
@@ -85,8 +86,8 @@ class HzptPlantsDirectoryApplicationTests {
      */
     @Test
     public void insertSpecies(){
-        List<Species> speciesList=new ArrayList<>(6);
-        for (int i = 0; i < 6; i++) {
+        List<Species> speciesList=new ArrayList<>(20);
+        for (int i = 0; i < 20; i++) {
             Species species=new Species();
             species.setId(IdUtil.simpleUUID());
             species.setCreateTime(new Date());
@@ -144,10 +145,16 @@ class HzptPlantsDirectoryApplicationTests {
 
     @Test
     public void idCreate(){
-        for (int i = 0; i < 23; i++) {
+        for (int i = 0; i < 20; i++) {
             String s = IdUtil.simpleUUID();
             System.out.println(s);
         }
+    }
+
+    @Test
+    public void searchPlantsAllInfo(){
+        GetPlantsAllInfoVo plant = plantsMapper.searchPlantsAllInfo("de2a39aa3fbb4b08bd2c8ffb1bc45333");
+        System.out.println(plant);
     }
 
 }

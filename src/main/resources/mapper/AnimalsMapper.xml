@@ -3,5 +3,24 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hzpt.plants.directory.mapper.AnimalsMapper">
-
+    <select id="getAnimalsAllInfoVo" resultType="hzpt.plants.directory.entity.vo.GetAnimalsAllInfoVo">
+        SELECT
+            animals.id AS id,
+            animals.animalName AS animalName,
+            animals.alias AS alias,
+            animals.imagesUrl AS imagesUrl,
+            animals.description AS description,
+            animals.address AS address,
+            animals.remarks AS remarks,
+            animals.createTime AS createTime,
+            (SELECT branch from tbl_branch AS branch1 where genus1.branchId=branch1.id) as branch,
+            (SELECT genus from tbl_genus AS genus1 where species1.genusId=genus1.id) as genus,
+            (SELECT species from tbl_species AS species1 where animals.speciesId=species1.id) as species
+        FROM
+            tbl_animals AS animals
+                LEFT JOIN tbl_species AS species1 ON animals.speciesId = species1.id
+                LEFT JOIN tbl_genus AS genus1 ON species1.genusId = genus1.id
+                LEFT JOIN tbl_branch AS branch1 ON genus1.branchId = branch1.id
+        where animals.id=#{id};
+    </select>
 </mapper>

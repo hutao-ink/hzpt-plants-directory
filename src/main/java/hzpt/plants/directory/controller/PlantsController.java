@@ -65,7 +65,7 @@ public class PlantsController {
     @ApiOperation(value = "通过种类id查找所有植物")
     @GetMapping("/searchPlantsByGenusId")
     public Result searchPlantsByGenusId(@RequestParam String id){
-        return plantsService.searchPlantsByGenusId(id,"plants/searchPlantsByGenusId");
+        return plantsService.searchPlantsByGenusId(id,"/plants/searchPlantsByGenusId");
     }
 
     /**
@@ -76,7 +76,7 @@ public class PlantsController {
     @ApiOperation(value = "通过名字模糊查询")
     @GetMapping("/fuzzyQuery")
     public Result fuzzyQuery(@RequestParam String name){
-        return plantsService.fuzzyQuery(name,"plants/fuzzyQuery");
+        return plantsService.fuzzyQuery(name,"/plants/fuzzyQuery");
     }
 
 
@@ -88,9 +88,8 @@ public class PlantsController {
     @ApiOperation(value = "通过植物id查询植物所有信息")
     @GetMapping("/queryPlantById")
     public Result queryPlantById(@RequestParam String id){
-        return plantsService.queryPlantById(id,"plants/queryPlantById");
+        return plantsService.queryPlantById(id,"/plants/queryPlantById");
     }
-
 
 }
 

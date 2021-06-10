@@ -13,7 +13,12 @@ mybatis-plus:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url:  jdbc:mysql://ip/directory
-    username: 
-    password: 
+    url:  jdbc:mysql://47.118.66.86:3306/directory?serverTimezone=Asia/Shanghai
+    username: hutao
+    password: Tfj@27599
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+wx:
+  appId: wxf9fdf71962b3cf77
+  AppSecret: 2cff4507eceea5a3cc77c7bfd3ab55ff
+  url: https://api.weixin.qq.com/sns/jscode2session?appid="+appId+"&secret="+appSecret+"&js_code="+ code +"&grant_type=authorization_code

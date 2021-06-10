@@ -1,34 +1,31 @@
-package hzpt.plants.directory.entity.po;
+package hzpt.plants.directory.entity.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+
 /**
- * <p>
- * 
- * </p>
- *
+ * <p></p>
  * @author tfj
- * @since 2021-06-06
+ * @since 2021/6/9
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("tbl_plants")
 @ApiModel(value="Plants对象", description="")
-public class Plants implements Serializable {
+public class GetAnimalsAllInfoVo {
 
     private String id ;
 
-    @ApiModelProperty(value = "植物名称")
-    @TableField("plantName")
-    private String plantName;
+    @ApiModelProperty(value = "动物名称")
+    @TableField("animalName")
+    private String animalName;
 
     @ApiModelProperty(value = "别名")
     private String alias;
@@ -40,9 +37,6 @@ public class Plants implements Serializable {
     @ApiModelProperty(value = "描述信息")
     private String description;
 
-    @ApiModelProperty(value = "种类id")
-    @TableField("speciesId")
-    private String speciesId;
 
     @ApiModelProperty(value = "分布区域id")
     @TableField("address")
@@ -52,8 +46,17 @@ public class Plants implements Serializable {
     @TableField("remarks")
     private String remarks;
 
-    @ApiModelProperty(value = "逻辑删除，1删除，0没删除")
-    private Integer deleted;
+    @ApiModelProperty(value = "科")
+    @TableField("branch")
+    private String branch;
+
+    @ApiModelProperty(value = "属")
+    @TableField("genus")
+    private String genus;
+
+    @ApiModelProperty(value = "种")
+    @TableField("species")
+    private String species;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("createTime")

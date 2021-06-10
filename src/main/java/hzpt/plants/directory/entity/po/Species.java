@@ -31,6 +31,10 @@ public class Species implements Serializable {
     @ApiModelProperty(value = "种名")
     private String species;
 
+    @ApiModelProperty(value = "图片地址")
+    @TableField("imagesUrl")
+    private String imagesUrl;
+
     @ApiModelProperty(value = "属类id")
     @TableField("genusId")
     private String genusId;

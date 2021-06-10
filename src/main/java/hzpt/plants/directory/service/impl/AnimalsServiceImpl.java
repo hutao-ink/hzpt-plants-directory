@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Animals;
+import hzpt.plants.directory.entity.vo.GetAnimalsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetAnimalsVo;
 import hzpt.plants.directory.mapper.AnimalsMapper;
 import hzpt.plants.directory.service.AnimalsService;
@@ -50,5 +51,38 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
                 .or().like("address",name)
                 .or().like("remarks",name));
         return  BeansUtils.listCopy(animalsList, GetAnimalsVo.class);
+    }
+
+    /**
+     * <p>通过动物id获取动物所有信息</p>
+     * @author tfj
+     * @since 2021/6/9
+     */
+    @Override
+    public Result queryAnimalById(String id, String path) {
+        GetAnimalsAllInfoVo animalsAllInfoVo = animalsMapper.getAnimalsAllInfoVo(id);
+        return new Result().result200(animalsAllInfoVo,path);
+    }
+
+    /**
+     * <p>通过种类id查找所有动物</p>
+     * @author tfj
+     * @since 2021/6/9
+     */
+    @Override
+    public Result searchAnimalsByGenusId(String id, String path) {
+        List<Animals> animalsList = animalsMapper.selectList(new QueryWrapper<Animals>().eq("speciesId", id));
+        List<GetAnimalsVo> getAnimalsVos = BeansUtils.listCopy(animalsList, GetAnimalsVo.class);
+        return new Result().result200(getAnimalsVos,path);
+    }
+    /**
+     * <p>查询所有动物</p>
+     * @author tfj
+     * @since 2021/6/9
+     */
+    @Override
+    public Result searchAnimals(String path) {
+        List<Animals> animalsList = animalsMapper.selectList(new QueryWrapper<>());
+        return new Result().result200(animalsList,path);
     }
 }

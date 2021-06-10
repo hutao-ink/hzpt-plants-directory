@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Plants;
+import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
 import hzpt.plants.directory.mapper.PlantsMapper;
 import hzpt.plants.directory.service.PlantsService;
@@ -67,7 +68,8 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
     @Override
     public Result searchPlantsByGenusId(String id, String path) {
         List<Plants> plantsList = plantsMapper.selectList(new QueryWrapper<Plants>().eq("speciesId", id));
-        return new Result().result200(plantsList,path);
+        List<GetPlantsVo> getPlantsVoList = BeansUtils.listCopy(plantsList, GetPlantsVo.class);
+        return new Result().result200(getPlantsVoList,path);
     }
 
     /**
@@ -107,7 +109,7 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
      */
     @Override
     public Result queryPlantById(String id, String path) {
-        Plants plant = plantsMapper.selectById(id);
+        GetPlantsAllInfoVo plant = plantsMapper.searchPlantsAllInfo(id);
         return new Result().result200(plant,path);
     }
 }

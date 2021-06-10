@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hzpt.plants.directory.mapper.PlantsMapper">
-
+    <select id="searchPlantsAllInfo" resultType="hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo">
+        SELECT
+            plants.id AS id,
+            plants.plantName AS plantName,
+            plants.alias AS alias,
+            plants.imagesUrl AS imagesUrl,
+            plants.description AS description,
+            plants.address AS address,
+            plants.remarks AS remarks,
+            plants.createTime AS createTime,
+            (SELECT branch from tbl_branch AS branch1 where genus1.branchId=branch1.id) as branch,
+            (SELECT genus from tbl_genus AS genus1 where species1.genusId=genus1.id) as genus,
+            (SELECT species from tbl_species AS species1 where plants.speciesId=species1.id) as species
+        FROM
+            tbl_plants AS plants
+                LEFT JOIN tbl_species AS species1 ON plants.speciesId = species1.id
+                LEFT JOIN tbl_genus AS genus1 ON species1.genusId = genus1.id
+                LEFT JOIN tbl_branch AS branch1 ON genus1.branchId = branch1.id
+        where plants.id=#{id};
+    </select>
 </mapper>
