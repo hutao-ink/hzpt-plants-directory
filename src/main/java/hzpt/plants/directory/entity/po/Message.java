@@ -3,41 +3,37 @@ package hzpt.plants.directory.entity.po;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
-import java.io.Serializable;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * <p>
- * 
- * </p>
- *
+ * <p></p>
  * @author tfj
- * @since 2021-06-06
+ * @since 2021/6/12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("tbl_branch")
-@ApiModel(value="Branch对象", description="")
-public class Branch implements Serializable {
+@TableName("tbl_message")
+@ApiModel(value="message对象", description="用户留言实体类")
+public class Message {
 
-    private String id ;
+    private String id;
 
-    @ApiModelProperty(value = "科目")
-    private String branch;
+    @ApiModelProperty(value = "用户id")
+    @TableField("userId")
+    private String userId;
 
-     @ApiModelProperty(value = "图片地址")
-     @TableField("imagesUrl")
+    @ApiModelProperty(value = "留言信息")
+    @TableField("userMessage")
+    private String userMessage;
+
+    @ApiModelProperty(value = "用户上传图片地址")
+    @TableField("imagesUrl")
     private String imagesUrl;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-
+    private String createTime;
 }

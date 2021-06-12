@@ -39,11 +39,8 @@ public class WxConfig {
 
     public CustomUserState getResponseEntity(String code) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appId + "&secret=" + appSecret + "&js_code=" + code + "&grant_type=authorization_code";
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.POST, null, String.class);
-        if (responseEntity != null && responseEntity.getStatusCode() == HttpStatus.OK) {
-            String body = responseEntity.getBody();
-            return gson.fromJson(body, CustomUserState.class);
-        }
-        return null;
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+        String body = responseEntity.getBody();
+        return gson.fromJson(body, CustomUserState.class);
     }
 }

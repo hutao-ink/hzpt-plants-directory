@@ -4,9 +4,12 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Plants;
+import hzpt.plants.directory.entity.vo.GetAnimalsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
+import hzpt.plants.directory.mapper.AnimalsMapper;
 import hzpt.plants.directory.mapper.PlantsMapper;
+import hzpt.plants.directory.service.AnimalsService;
 import hzpt.plants.directory.service.PlantsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import hzpt.plants.directory.utils.BeansUtils;
@@ -28,6 +31,8 @@ import java.util.List;
 public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> implements PlantsService {
     @Resource
     private PlantsMapper plantsMapper;
+    @Resource
+    private AnimalsMapper animalsMapper;
     /**
      * <p>添加植物</p>
      * @author tfj
@@ -103,13 +108,17 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
     }
 
     /**
-     * <p>通过植物id查询植物所有信息</p>
+     * <p>通过生物id查询植物所有信息</p>
      * @author tfj
      * @since 2021/6/7
      */
     @Override
     public Result queryPlantById(String id, String path) {
-        GetPlantsAllInfoVo plant = plantsMapper.searchPlantsAllInfo(id);
-        return new Result().result200(plant,path);
+        GetPlantsAllInfoVo plantsAllInfoVo = plantsMapper.searchPlantsAllInfo(id);
+        GetAnimalsAllInfoVo animalsAllInfoVo = animalsMapper.getAnimalsAllInfoVo(id);
+        if (plantsAllInfoVo!=null){
+            return new Result().result200(plantsAllInfoVo,path);
+        }
+        return new Result().result200(animalsAllInfoVo,path);
     }
 }

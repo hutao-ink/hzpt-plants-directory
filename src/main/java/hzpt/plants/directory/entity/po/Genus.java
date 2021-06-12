@@ -1,5 +1,6 @@
 package hzpt.plants.directory.entity.po;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
@@ -36,8 +37,7 @@ public class Genus implements Serializable {
     private String branchId;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField("createTime")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
 

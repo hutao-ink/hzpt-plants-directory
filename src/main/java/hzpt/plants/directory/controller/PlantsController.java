@@ -81,11 +81,11 @@ public class PlantsController {
 
 
     /**
-     * <p>通过植物id查询植物所有信息</p>
+     * <p>通过生物id查询植物所有信息</p>
      * @author tfj
      * @since 2021/6/7
      */
-    @ApiOperation(value = "通过植物id查询植物所有信息")
+    @ApiOperation(value = "通过生物id查询植物所有信息")
     @GetMapping("/queryPlantById")
     public Result queryPlantById(@RequestParam String id){
         return plantsService.queryPlantById(id,"/plants/queryPlantById");

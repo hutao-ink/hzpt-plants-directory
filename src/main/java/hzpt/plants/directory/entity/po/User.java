@@ -1,5 +1,6 @@
 package hzpt.plants.directory.entity.po;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -25,24 +26,35 @@ public class User implements Serializable {
     private String id;
 
     @ApiModelProperty(value = "用户名")
-    @TableField("userName")
-    private String userName;
+    @TableField("nickName")
+    private String nickName;
 
     @ApiModelProperty(value = "头像地址")
     @TableField("imageUrl")
     private String imageUrl;
 
-    @ApiModelProperty(value = "用户邮箱")
-    @TableField("email")
-    private String email;
+    @ApiModelProperty(value = "用户性别")
+    @TableField("gender")
+    private int gender;
 
     @ApiModelProperty(value = "openID")
     @TableField("openId")
     private String openId;
 
+    @ApiModelProperty(value = "城市")
+    @TableField("city")
+    private String city;
+
+    @ApiModelProperty(value = "省份")
+    @TableField("province")
+    private String province;
+
+   @ApiModelProperty(value = "国家")
+    @TableField("country")
+    private String country;
+
     @ApiModelProperty(value = "创建时间")
-    @TableField("createTime")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
 }

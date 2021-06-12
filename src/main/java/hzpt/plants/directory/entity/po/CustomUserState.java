@@ -18,5 +18,5 @@ public class CustomUserState {
 
     private String openid;
 
-    private String sessionKey;
+    private String session_key;
 }

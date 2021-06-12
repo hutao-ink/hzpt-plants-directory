@@ -3,13 +3,18 @@ package hzpt.plants.directory.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.RequestParameterBuilder;
+import springfox.documentation.schema.ScalarType;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.ParameterType;
+import springfox.documentation.service.RequestParameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
+
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -18,26 +23,34 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
  * @Description:
  */
 @Configuration
-@EnableSwagger2WebMvc
 public class SwaggerConfig {
 
-    @Bean(value = "defaultApi2")
-    public Docket defaultApi2() {
-        Docket docket=new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(new ApiInfoBuilder()
-                        //.title("swagger-bootstrap-ui-demo RESTful APIs")
-                        .description("")
-                        .termsOfServiceUrl("https://hutao.ink/a/directory/")
-                        .contact("xx@qq.com")
-                        .version("1.0")
-                        .build())
-                //分组名称
-                .groupName("2.X版本")
+    @Bean
+    public Docket createRestApi(){
+        return new Docket(DocumentationType.OAS_30).pathMapping("/")
+                // 开启个人信息
+                .apiInfo(apiInfo())
+                // 选择哪些接口作为swagger的doc发布
                 .select()
-                //这里指定Controller扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("hzpt.plants.directory.controller"))
-                .paths(PathSelectors.any())
                 .build();
-        return docket;
+    }
+
+    /**
+     * 个人信息
+     */
+    public ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                //api文本
+                .title("HuTao api")
+                //说明
+                .description("")
+                //用户名 + 网址 + 邮箱
+                .contact(new Contact("directory" ,
+                        "" ,
+                        ""))
+                //版本
+                .version("3.0")
+                //运行
+                .build();
     }
 }

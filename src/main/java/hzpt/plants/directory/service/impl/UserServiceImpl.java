@@ -1,15 +1,20 @@
 package hzpt.plants.directory.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.config.OssConfig;
 import hzpt.plants.directory.entity.dto.PostUserDto;
 import hzpt.plants.directory.entity.po.CustomUserState;
+import hzpt.plants.directory.entity.po.Message;
 import hzpt.plants.directory.entity.po.Plants;
 import hzpt.plants.directory.entity.po.User;
 import hzpt.plants.directory.entity.vo.GetAnimalsVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
+import hzpt.plants.directory.mapper.MessageMapper;
 import hzpt.plants.directory.mapper.PlantsMapper;
 import hzpt.plants.directory.mapper.UserMapper;
 import hzpt.plants.directory.service.AnimalsService;
@@ -18,7 +23,11 @@ import hzpt.plants.directory.service.UserService;
 import hzpt.plants.directory.config.WxConfig;
 import hzpt.plants.directory.utils.BeansUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +50,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
     @Resource
     private PlantsMapper plantsMapper;
+    @Resource
+    private OssConfig ossConfig;
+    @Resource
+    private OSS ossClient;
+    @Resource
+    private MessageMapper messageMapper;
     /**
      * <p>用户搜索动植物</p>
      * @author tfj
@@ -59,26 +74,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
-     * <p>微信用户登录</p>
+     * <p>微信用户获取登录凭证</p>
      * @author tfj
      * @since 2021/6/10
      */
     @Override
-    public Result userLoginWx(PostUserDto postUserDto,String code, String path) {
-        User addUser=new User();
+    public Result userLoginWx(String code, String path) {
+        User user=new User();
         CustomUserState responseEntity = wxConfig.getResponseEntity(code);
-        addUser.setOpenId(responseEntity.getOpenid());
-        if (userMapper.selectList(new QueryWrapper<User>().eq("openId",responseEntity.getOpenid())).size()==0){
-            addUser.setId(IdUtil.simpleUUID());
-            addUser.setUserName(postUserDto.getUserName());
-            addUser.setCreateTime(new Date());
-            addUser.setOpenId(responseEntity.getOpenid());
-            int insert = userMapper.insert(addUser);
-            return new Result().result200(insert+"首次登录成功",path);
-        }else {
-            User user = userMapper.selectOne(new QueryWrapper<User>().eq("openId",responseEntity.getOpenid()));
-            return new Result().result200(user,path);
-        }
+        user.setOpenId(responseEntity.getOpenid());
+        user.setId(IdUtil.simpleUUID());
+        userMapper.insert(user);
+        return new Result().result200(responseEntity,path);
+    }
+
+    /**
+     * <p>获取微信用户信息</p>
+     * @author tfj
+     * @since 2021/6/11
+     */
+    @Override
+    public Result getUserInfo(PostUserDto postUserDto, String path) {
+        User getUser=userMapper.selectOne(new QueryWrapper<User>().eq("openId",postUserDto.getOpenId()));
+        getUser.setGender(postUserDto.getGender());
+        getUser.setImageUrl(postUserDto.getImageUrl());
+        getUser.setNickName(postUserDto.getNickName());
+        getUser.setCity(postUserDto.getCity());
+        getUser.setProvince(postUserDto.getProvince());
+        getUser.setCountry(postUserDto.getCountry());
+        getUser.setCreateTime(new Date());
+        userMapper.update(getUser,new QueryWrapper<User>().eq("openId",postUserDto.getOpenId()));
+        return new Result().result200(getUser.toString(),path);
     }
 
     /**
@@ -91,5 +117,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<Plants> plantsList = plantsMapper.selectList(new QueryWrapper<Plants>().orderByAsc("createTime").last("limit 20"));
         List<GetPlantsVo> getPlantsVoList = BeansUtils.listCopy(plantsList, GetPlantsVo.class);
         return new Result().result200(getPlantsVoList,path);
+    }
+    /**
+     * <p>用户批量上传图片</p>
+     * @author tfj
+     * @since 2021/6/12
+     */
+    @Override
+    public Result userUploadImages(MultipartFile multipartFile,String userId, String path) {
+        if (multipartFile == null) {
+            return new Result().result500("请选择图片", path);
+        }
+        String originalFilename = multipartFile.getOriginalFilename();
+        PutObjectRequest putObjectRequest = null;
+        try {
+            putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(multipartFile.getBytes()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ossClient.putObject(putObjectRequest);
+        ossClient.shutdown();
+        String imagesUrl=ossConfig.getDomain()+originalFilename;
+        Message message=new Message();
+        message.setId(IdUtil.simpleUUID());
+        message.setImagesUrl(imagesUrl);
+        message.setUserId(userId);
+        messageMapper.insert(message);
+        return new Result().result200("上传成功",path);
+    }
+
+    @Override
+    public Result userMessage(String userId, String message, String path) {
+        if (message==null){
+            return new Result().result500("请填写留言内容",path);
+        }
+        Message addMessage = messageMapper.selectOne(new QueryWrapper<Message>().eq("userId", userId));
+        addMessage.setUserMessage(message);
+        return new Result().result200("留言成功",path);
     }
 }

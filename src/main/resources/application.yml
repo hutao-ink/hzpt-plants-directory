@@ -18,6 +18,22 @@ spring:
     password: Tfj@27599
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
+aliyun:
+  oss:
+    # API鉴权
+    accessKeyId: LTAI5tJQBA1ZcGTScwjd3xDz
+    # 访问身份验证中用到用户标识
+    accessKeySecret: 2UWGewaH5GwcxXU4UAELegNq5BmTgN
+    # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    # oss访问域名（内网）
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    bucketName: hutao-ink # oss的存储空间
+    domain: http://hutao-ink.oss-cn-hangzhou.aliyuncs.com/
+    policyExpire: 3000 # url有效期(S)
+    maxSize: 1000M # 上传文件大小(M)
+
+
 wx:
   appId: wxf9fdf71962b3cf77
   AppSecret: 2cff4507eceea5a3cc77c7bfd3ab55ff
