@@ -54,7 +54,7 @@ public class User implements Serializable {
     private String country;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
+    @TableField("createTime")
     private Date createTime;
 
 }

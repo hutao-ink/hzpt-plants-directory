@@ -41,7 +41,7 @@ public class Species implements Serializable {
     private String genusId;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
+    @TableField("createTime")
     private Date createTime;
 
 

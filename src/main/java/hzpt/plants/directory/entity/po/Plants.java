@@ -57,6 +57,6 @@ public class Plants implements Serializable {
     private Integer deleted;
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
+    @TableField("createTime")
     private Date createTime;
 }

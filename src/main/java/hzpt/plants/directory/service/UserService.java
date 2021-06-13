@@ -1,6 +1,5 @@
 package hzpt.plants.directory.service;
 
-import com.aliyun.oss.model.MultipartUpload;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostUserDto;
@@ -38,15 +37,27 @@ public interface UserService extends IService<User> {
      */
     Result getNewestTwentyBiological(String path);
     /**
-     * <p>用户批量上传图片</p>
-     * @author tfj
-     * @since 2021/6/12
-     */
-    Result userUploadImages(MultipartFile multipartFile,String userId, String path);
-    /**
      * <p>用户留言</p>
      * @author tfj
-     * @since 2021/6/12
+     * @since 2021/6/13
      */
-    Result userMessage(String userId, String message, String path);
+    Result userAddMessage(String message,String userId,String messageId, String path);
+    /**
+     * <p>通过用户id获取用户留言</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    Result getUserMessageById(String userId, String path);
+    /**
+     * <p>获取所有用户留言信息</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    Result getAllMessage(String path);
+    /**
+     * <p>用户上传图片</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    Result userAddImages(MultipartFile multipartFile, String userId, String path);
 }

@@ -37,4 +37,3 @@ aliyun:
 wx:
   appId: wxf9fdf71962b3cf77
   AppSecret: 2cff4507eceea5a3cc77c7bfd3ab55ff
-  url: https://api.weixin.qq.com/sns/jscode2session?appid="+appId+"&secret="+appSecret+"&js_code="+ code +"&grant_type=authorization_code

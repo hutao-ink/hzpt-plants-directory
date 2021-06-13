@@ -1,10 +1,15 @@
 package hzpt.plants.directory.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Message;
 import hzpt.plants.directory.mapper.MessageMapper;
 import hzpt.plants.directory.service.MessageService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p></p>
@@ -13,4 +18,16 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> implements MessageService {
+    @Resource
+    private MessageMapper messageMapper;
+    /**
+     * <p>展示所有用户留言</p>
+     * @author tfj
+     * @since 2021/6/12
+     */
+    @Override
+    public Result getAllMessages(String path) {
+        List<Message> messages = messageMapper.selectList(new QueryWrapper<>());
+        return new Result().result200(messages,path);
+    }
 }

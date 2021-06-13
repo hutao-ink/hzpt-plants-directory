@@ -32,12 +32,18 @@ public class Branch implements Serializable {
     @ApiModelProperty(value = "科目")
     private String branch;
 
-     @ApiModelProperty(value = "图片地址")
-     @TableField("imagesUrl")
+    @ApiModelProperty(value = "图片地址")
+    @TableField("imagesUrl")
     private String imagesUrl;
 
+    @ApiModelProperty(value = "科目类型地址")
+    @TableField("type")
+    private int type;
+
+
+
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
+    @TableField("createTime")
     private Date createTime;
 
 }

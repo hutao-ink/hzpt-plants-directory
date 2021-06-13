@@ -13,6 +13,7 @@ import hzpt.plants.directory.entity.po.Message;
 import hzpt.plants.directory.entity.po.Plants;
 import hzpt.plants.directory.entity.po.User;
 import hzpt.plants.directory.entity.vo.GetAnimalsVo;
+import hzpt.plants.directory.entity.vo.GetMessagesVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
 import hzpt.plants.directory.mapper.MessageMapper;
 import hzpt.plants.directory.mapper.PlantsMapper;
@@ -118,41 +119,82 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<GetPlantsVo> getPlantsVoList = BeansUtils.listCopy(plantsList, GetPlantsVo.class);
         return new Result().result200(getPlantsVoList,path);
     }
+
     /**
-     * <p>用户批量上传图片</p>
+     * <p>用户上传图片</p>
      * @author tfj
-     * @since 2021/6/12
+     * @since 2021/6/13
      */
     @Override
-    public Result userUploadImages(MultipartFile multipartFile,String userId, String path) {
-        if (multipartFile == null) {
-            return new Result().result500("请选择图片", path);
+    public Result userAddImages(MultipartFile multipartFile,String userId, String path) {
+        if (multipartFile!=null){
+            String originalFilename = multipartFile.getOriginalFilename();
+
+            PutObjectRequest putObjectRequest = null;
+            try {
+                putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(multipartFile.getBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ossClient.putObject(putObjectRequest);
+            ossClient.shutdown();
+            String imagesUrl=ossConfig.getDomain()+originalFilename;
+            Message addMessage=new Message();
+            addMessage.setId(IdUtil.simpleUUID());
+            addMessage.setImagesUrl(imagesUrl);
+            addMessage.setUserId(userId);
+            addMessage.setCreateTime(new Date());
+            messageMapper.insert(addMessage);
+            return new Result().result200("上传成功"+addMessage.getId(),path);
+        }else {
+            return new Result().result200("请选择图片:",path);
         }
-        String originalFilename = multipartFile.getOriginalFilename();
-        PutObjectRequest putObjectRequest = null;
-        try {
-            putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(multipartFile.getBytes()));
-        } catch (IOException e) {
-            e.printStackTrace();
+    }
+    /**
+     * <p>用户留言</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @Override
+    public Result userAddMessage(String message, String userId,String messageId, String path) {
+        if (message==null){
+            return new Result().result500("请填写:",path);
         }
-        ossClient.putObject(putObjectRequest);
-        ossClient.shutdown();
-        String imagesUrl=ossConfig.getDomain()+originalFilename;
-        Message message=new Message();
-        message.setId(IdUtil.simpleUUID());
-        message.setImagesUrl(imagesUrl);
-        message.setUserId(userId);
-        messageMapper.insert(message);
-        return new Result().result200("上传成功",path);
+        Message selectOne = messageMapper.selectOne(new QueryWrapper<Message>().eq("id", messageId));
+        if (selectOne!=null){
+            selectOne.setUserMessage(message);
+            messageMapper.updateById(selectOne);
+            return new Result().result200("留言成功",path);
+        }else {
+            Message addMessage=new Message();
+            addMessage.setId(IdUtil.simpleUUID());
+            addMessage.setUserId(userId);
+            addMessage.setUserMessage(message);
+            addMessage.setCreateTime(new Date());
+            messageMapper.insert(addMessage);
+            return new Result().result200("留言成功",path);
+        }
     }
 
+    /**
+     * <p>通过用户id获取用户留言</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
     @Override
-    public Result userMessage(String userId, String message, String path) {
-        if (message==null){
-            return new Result().result500("请填写留言内容",path);
-        }
-        Message addMessage = messageMapper.selectOne(new QueryWrapper<Message>().eq("userId", userId));
-        addMessage.setUserMessage(message);
-        return new Result().result200("留言成功",path);
+    public Result getUserMessageById(String userId, String path) {
+        List<GetMessagesVo> messageList = messageMapper.getUserMessageById(userId);
+
+        return new Result().result200(messageList,path);
+    }
+    /**
+     * <p>获取所有用户留言信息</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @Override
+    public Result getAllMessage(String path) {
+        List<GetMessagesVo> allMessage = messageMapper.getAllMessage();
+        return new Result().result200(allMessage,path);
     }
 }

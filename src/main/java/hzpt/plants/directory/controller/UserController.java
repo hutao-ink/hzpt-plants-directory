@@ -4,6 +4,7 @@ import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostUserDto;
 import hzpt.plants.directory.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,25 +65,51 @@ public class UserController {
         return userService.getNewestTwentyBiological("/user/getNewestTwentyBiological");
     }
 
+
     /**
-     * <p>用户批量上传图片</p>
+     * <p>用户上传图片</p>
      * @author tfj
-     * @since 2021/6/12
+     * @since 2021/6/13
      */
-    @ApiOperation(value = "用户批量上传图片")
-    @PostMapping("/userUploadImages")
-    public Result userUploadImages(@RequestPart MultipartFile multipartFile,String userId){
-        return userService.userUploadImages(multipartFile,userId,"/user/userUploadImages");
+    @ApiOperation(value = "用户上传图片")
+    @PostMapping(value = "/userAddImages",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Result userAddImages(@RequestParam String userId,@RequestPart MultipartFile multipartFile){
+        return userService.userAddImages(multipartFile,userId,"/user/userAddImages");
     }
+
     /**
      * <p>用户留言</p>
      * @author tfj
-     * @since 2021/6/12
+     * @since 2021/6/13
      */
     @ApiOperation(value = "用户留言")
-    @PostMapping("/userMessage")
-    public Result userMessage(String userId,String message){
-        return userService.userMessage(userId,message,"/user/userMessage");
+    @PostMapping(value = "/userAddMessage")
+    public Result userAddMessage(@RequestParam String message,@RequestParam String userId,String messageId){
+        return userService.userAddMessage(message,userId,messageId,"/user/userAddMessage");
+    }
+
+
+
+    /**
+     * <p>通过用户id获取用户留言</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @ApiOperation(value = "通过用户id获取用户留言")
+    @GetMapping("/getUserMessageById")
+    public Result getUserMessageById(@RequestParam String userId){
+        return userService.getUserMessageById(userId,"/user/getUserMessageById");
+    }
+
+    /**
+     * <p>获取所有用户留言信息</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @ApiOperation(value = "获取所有用户留言信息")
+    @GetMapping("getAllMessage")
+    public Result getAllMessage(){
+        return userService.getAllMessage("/user/getAllMessage");
     }
 
 }

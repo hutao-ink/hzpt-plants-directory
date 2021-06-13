@@ -2,6 +2,9 @@ package hzpt.plants.directory.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import hzpt.plants.directory.entity.po.Message;
+import hzpt.plants.directory.entity.vo.GetMessagesVo;
+
+import java.util.List;
 
 /**
  * @Author: tfj
@@ -9,4 +12,7 @@ import hzpt.plants.directory.entity.po.Message;
  * @Description:
  */
 public interface MessageMapper extends BaseMapper<Message> {
+    List<GetMessagesVo> getUserMessageById(String userId);
+
+    List<GetMessagesVo> getAllMessage();
 }

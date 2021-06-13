@@ -55,5 +55,29 @@ public class BranchController {
         return branchService.searchBranch("/branch/searchBranch");
     }
 
+     /**
+     * <p>查询植物科目</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @ApiOperation(value = "查询植物科目")
+    @GetMapping("/searchPlantBranch")
+    public Result searchPlantBranch(){
+        return branchService.searchPlantBranch("/branch/searchPlantBranch");
+    }
+
+    /**
+     * <p>查询动物科目</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @ApiOperation(value = "查询动物科目")
+    @GetMapping("/searchAnimalBranch")
+    public Result searchAnimalBranch(){
+        return branchService.searchAnimalBranch("/branch/searchAnimalBranch");
+    }
+
+
+
 }
 

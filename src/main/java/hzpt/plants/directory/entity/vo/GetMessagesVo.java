@@ -1,24 +1,22 @@
-package hzpt.plants.directory.entity.po;
+package hzpt.plants.directory.entity.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 /**
- * <p></p>
- * @author tfj
- * @since 2021/6/12
+ * @Author: tfj
+ * @Date: 2021/6/12 23
+ * @Description:
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("tbl_message")
-@ApiModel(value="message对象", description="用户留言实体类")
-public class Message {
+@AllArgsConstructor
+@NoArgsConstructor
+public class GetMessagesVo {
 
     private String id;
 
@@ -33,6 +31,15 @@ public class Message {
     @ApiModelProperty(value = "用户上传图片地址")
     @TableField("imagesUrl")
     private String imagesUrl;
+
+
+    @ApiModelProperty(value = "用户名")
+    @TableField("nickName")
+    private String nickName;
+
+    @ApiModelProperty(value = "头像地址")
+    @TableField("imageUrl")
+    private String imageUrl;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("createTime")

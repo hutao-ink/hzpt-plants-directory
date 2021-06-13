@@ -52,4 +52,25 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
         return new Result().result200(branchList,path);
     }
 
+    /**
+     * <p>查询植物科目</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @Override
+    public Result searchPlantBranch(String path) {
+        List<Branch> type = branchMapper.selectList(new QueryWrapper<Branch>().eq("type", 0));
+        return new Result().result200(type,path);
+    }
+
+    /**
+     * <p>查询动物科目</p>
+     * @author tfj
+     * @since 2021/6/13
+     */
+    @Override
+    public Result searchAnimalBranch(String path) {
+        List<Branch> type = branchMapper.selectList(new QueryWrapper<Branch>().eq("type", 1));
+        return new Result().result200(type,path);
+    }
 }

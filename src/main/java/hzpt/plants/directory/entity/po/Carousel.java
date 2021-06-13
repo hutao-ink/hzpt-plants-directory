@@ -42,7 +42,7 @@ public class Carousel implements Serializable {
 
 
     @ApiModelProperty(value = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
+    @TableField("createTime")
     private Date createTime;
 
 
