@@ -69,14 +69,14 @@ public class PlantsController {
     }
 
     /**
-     * <p>通过名字模糊查询</p>
+     * <p>分页模糊查询</p>
      * @author tfj
      * @since 2021/6/7
      */
-    @ApiOperation(value = "通过名字模糊查询")
+    @ApiOperation(value = "分页模糊查询")
     @GetMapping("/fuzzyQuery")
-    public Result fuzzyQuery(@RequestParam String name){
-        return plantsService.fuzzyQuery(name,"/plants/fuzzyQuery");
+    public Result fuzzyQuery(@RequestParam String name,@RequestParam Integer currentPage){
+        return plantsService.fuzzyQuery(name,currentPage,"/plants/fuzzyQuery");
     }
 
 

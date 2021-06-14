@@ -145,7 +145,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             addMessage.setUserId(userId);
             addMessage.setCreateTime(new Date());
             messageMapper.insert(addMessage);
-            return new Result().result200("上传成功"+addMessage.getId(),path);
+            return new Result().result200(addMessage.getId(),path);
+
         }else {
             return new Result().result200("请选择图片:",path);
         }

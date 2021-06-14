@@ -35,11 +35,11 @@ public interface PlantsService extends IService<Plants> {
      */
     Result searchPlantsByGenusId(String id, String path);
     /**
-     * <p>通过名字模糊查询</p>
+     * <p>分页模糊查询</p>
      * @author tfj
      * @since 2021/6/7
      */
-    Result fuzzyQuery(String name, String path);
+    Result fuzzyQuery(String name,Integer currentPage, String path);
     /**
      * <p>通过名字模糊查询</p>
      * @author tfj

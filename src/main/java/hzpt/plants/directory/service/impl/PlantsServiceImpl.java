@@ -2,6 +2,9 @@ package hzpt.plants.directory.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Plants;
 import hzpt.plants.directory.entity.vo.GetAnimalsAllInfoVo;
@@ -9,7 +12,6 @@ import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
 import hzpt.plants.directory.mapper.AnimalsMapper;
 import hzpt.plants.directory.mapper.PlantsMapper;
-import hzpt.plants.directory.service.AnimalsService;
 import hzpt.plants.directory.service.PlantsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import hzpt.plants.directory.utils.BeansUtils;
@@ -78,18 +80,21 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
     }
 
     /**
-     * <p>通过名字模糊查询</p>
+     * <p>分页模糊查询</p>
      * @author tfj
      * @since 2021/6/7
      */
     @Override
-    public Result fuzzyQuery(String name, String path) {
-        List<Plants> plantsList = plantsMapper.selectList(new QueryWrapper<Plants>().like("plantName", name)
+    public Result fuzzyQuery(String name,Integer currentPage, String path) {
+        QueryWrapper<Plants> queryWrapper= Wrappers.query();
+                queryWrapper.like("plantName", name)
                 .or().like("alias",name)
                 .or().like("description",name)
                 .or().like("address",name)
-                .or().like("remarks",name));
-        List<GetPlantsVo> getPlantsVos = BeansUtils.listCopy(plantsList, GetPlantsVo.class);
+                .or().like("remarks",name);
+        Page<Plants> page=new Page<>(currentPage,8);
+        IPage<Plants> plantsList=plantsMapper.selectPage(page,queryWrapper);
+        List<GetPlantsVo> getPlantsVos = BeansUtils.listCopy(plantsList.getRecords(), GetPlantsVo.class);
         return new Result().result200(getPlantsVos,path);
     }
     /**
