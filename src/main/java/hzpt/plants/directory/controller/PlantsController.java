@@ -75,7 +75,7 @@ public class PlantsController {
      */
     @ApiOperation(value = "分页模糊查询")
     @GetMapping("/fuzzyQuery")
-    public Result fuzzyQuery(@RequestParam String name,@RequestParam Integer currentPage){
+    public Result fuzzyQuery(@RequestParam String name,Integer currentPage){
         return plantsService.fuzzyQuery(name,currentPage,"/plants/fuzzyQuery");
     }
 

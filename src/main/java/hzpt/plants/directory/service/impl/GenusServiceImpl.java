@@ -62,4 +62,10 @@ public class GenusServiceImpl extends ServiceImpl<GenusMapper, Genus> implements
         List<Genus> genusList = genusMapper.selectList(new QueryWrapper<Genus>().eq("branchId", id));
         return new Result().result200(genusList,path);
     }
+
+    @Override
+    public Result getGenusInfo(String genus, String path) {
+        Genus selectOne = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", genus));
+        return new Result().result200(selectOne,path);
+    }
 }

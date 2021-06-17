@@ -52,7 +52,7 @@ public class GenusController {
     @ApiOperation(value = "查询所有属目")
     @GetMapping("/searchGenus")
     public Result searchGenus(){
-        return genusService.searchGenus("/branch/searchGenus");
+        return genusService.searchGenus("/genus/searchGenus");
     }
     /**
      * <p>通过科类id查找所有属类</p>
@@ -62,7 +62,18 @@ public class GenusController {
     @ApiOperation(value = "通过科类id查找所有属类")
     @GetMapping("/searchGenusByBranchId")
     public Result searchGenusByBranchId(@RequestParam String id){
-        return genusService.searchGenusByBranchId(id,"branch/searchGenusByBranchId");
+        return genusService.searchGenusByBranchId(id,"/genus/searchGenusByBranchId");
+    }
+
+    /**
+     * <p>通过属名获取属信息</p>
+     * @author tfj
+     * @since 2021/6/16
+     */
+    @ApiOperation(value = "通过属名获取属信息")
+    @GetMapping("/getGenusInfo")
+    public Result getGenusInfo(@RequestParam String genus){
+        return genusService.getGenusInfo(genus,"/genus/getGenusInfo");
     }
 }
 

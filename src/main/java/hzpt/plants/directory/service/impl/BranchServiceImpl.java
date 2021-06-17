@@ -48,7 +48,7 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
      */
     @Override
     public Result searchBranch(String path) {
-        List<Branch> branchList = branchMapper.selectList(new QueryWrapper<>());
+        List<Branch> branchList = branchMapper.selectList(new QueryWrapper<Branch>().orderByDesc("createTime"));
         return new Result().result200(branchList,path);
     }
 
@@ -59,7 +59,7 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
      */
     @Override
     public Result searchPlantBranch(String path) {
-        List<Branch> type = branchMapper.selectList(new QueryWrapper<Branch>().eq("type", 0));
+        List<Branch> type = branchMapper.selectList(new QueryWrapper<Branch>().eq("type", 0).orderByDesc("createTime"));
         return new Result().result200(type,path);
     }
 
@@ -70,7 +70,17 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
      */
     @Override
     public Result searchAnimalBranch(String path) {
-        List<Branch> type = branchMapper.selectList(new QueryWrapper<Branch>().eq("type", 1));
+        List<Branch> type = branchMapper.selectList(new QueryWrapper<Branch>().eq("type", 1).orderByDesc("createTime"));
         return new Result().result200(type,path);
+    }
+    /**
+     * <p>通过科名获取科信息</p>
+     * @author tfj
+     * @since 2021/6/16
+     */
+    @Override
+    public Result getBranchInfo(String branch, String path) {
+        Branch selectOne = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", branch));
+        return new Result().result200(selectOne,path);
     }
 }

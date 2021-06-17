@@ -62,4 +62,30 @@ public class SpeciesServiceImpl extends ServiceImpl<SpeciesMapper, Species> impl
         List<Species> speciesList = speciesMapper.selectList(new QueryWrapper<Species>().eq("genusId", id));
         return new Result().result200(speciesList,path);
     }
+    /**
+     * <p>种类插入图片</p>
+     * @author tfj
+     * @since 2021/6/17
+     */
+    @Override
+    public Result insertImageByName(String name, String imageUrl, String path) {
+        Species selectOne = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", name));
+        if (selectOne==null){
+            return new Result().result500("不存在该物种",path);
+        }else {
+            selectOne.setImagesUrl(imageUrl);
+            speciesMapper.updateById(selectOne);
+            return new Result().result200("插入图片成功",path);
+        }
+    }
+    /**
+     * <p>获取所有图片为空的种类</p>
+     * @author tfj
+     * @since 2021/6/17
+     */
+    @Override
+    public Result searchSpeciesWhereImageNull(String path) {
+        List<Species> imagesUrl = speciesMapper.searchSpeciesWhereImageNull();
+        return new Result().result200(imagesUrl,path);
+    }
 }

@@ -37,4 +37,10 @@ public interface BranchService extends IService<Branch> {
      * @since 2021/6/13
      */
     Result searchAnimalBranch(String path);
+    /**
+     * <p>通过科名获取科信息</p>
+     * @author tfj
+     * @since 2021/6/16
+     */
+    Result getBranchInfo(String branch, String path);
 }

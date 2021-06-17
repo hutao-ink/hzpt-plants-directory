@@ -2,6 +2,9 @@ package hzpt.plants.directory.mapper;
 
 import hzpt.plants.directory.entity.po.Species;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SpeciesMapper extends BaseMapper<Species> {
 
+    @Select("select * from tbl_species where imagesUrl is null;")
+    List<Species> searchSpeciesWhereImageNull();
 }

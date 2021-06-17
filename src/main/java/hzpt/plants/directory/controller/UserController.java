@@ -4,7 +4,6 @@ import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostUserDto;
 import hzpt.plants.directory.service.UserService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,14 +24,14 @@ public class UserController {
     private UserService userService;
 
     /**
-     * <p>用户搜索动植物</p>
+     * <p>用户搜索动植物分页</p>
      * @author tfj
      * @since 2021/6/8
      */
-    @ApiOperation(value = "用户搜索动植物")
+    @ApiOperation(value = "用户搜索动植物分页")
     @GetMapping("/fuzzyQuery")
-    public Result fuzzyQueryByName(@RequestParam String name){
-        return userService.fuzzyQuery(name,"/user/fuzzyQueryByName");
+    public Result fuzzyQueryByName(@RequestParam String name,Integer currentPage){
+        return userService.fuzzyQuery(name,currentPage,"/user/fuzzyQueryByName");
     }
     /**
      * <p>微信用户获取登录凭证</p>
@@ -72,9 +71,9 @@ public class UserController {
      * @since 2021/6/13
      */
     @ApiOperation(value = "用户上传图片")
-    @PostMapping(value = "/userAddImages",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result userAddImages(@RequestParam String userId,@RequestPart MultipartFile multipartFile){
-        return userService.userAddImages(multipartFile,userId,"/user/userAddImages");
+    @PostMapping(value = "/userAddImages")
+    public Result userAddImages(@RequestParam String openId,@RequestPart MultipartFile file) {
+        return userService.userAddImages(file,openId,"/user/userAddImages");
     }
 
     /**
@@ -83,22 +82,22 @@ public class UserController {
      * @since 2021/6/13
      */
     @ApiOperation(value = "用户留言")
-    @PostMapping(value = "/userAddMessage")
-    public Result userAddMessage(@RequestParam String message,@RequestParam String userId,String messageId){
-        return userService.userAddMessage(message,userId,messageId,"/user/userAddMessage");
+    @GetMapping(value = "/userAddMessage")
+    public Result userAddMessage(@RequestParam String message,String openId,String messageId){
+        return userService.userAddMessage(message,openId,messageId,"/user/userAddMessage");
     }
 
 
 
     /**
-     * <p>通过用户id获取用户留言</p>
+     * <p>通过用户openId获取用户留言</p>
      * @author tfj
      * @since 2021/6/13
      */
-    @ApiOperation(value = "通过用户id获取用户留言")
+    @ApiOperation(value = "通过用户openId获取用户留言")
     @GetMapping("/getUserMessageById")
-    public Result getUserMessageById(@RequestParam String userId){
-        return userService.getUserMessageById(userId,"/user/getUserMessageById");
+    public Result getUserMessageById(@RequestParam String openId){
+        return userService.getUserMessageById(openId,"/user/getUserMessageById");
     }
 
     /**

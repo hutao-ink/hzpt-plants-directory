@@ -64,5 +64,26 @@ public class SpeciesController {
     public Result searchSpeciesByGenusId(@RequestParam String id){
         return speciesService.searchSpeciesByGenusId(id,"branch/searchSpeciesByGenusId");
     }
+
+    /**
+     * <p>获取所有图片为空的种类</p>
+     * @author tfj
+     * @since 2021/6/17
+     */
+    @ApiOperation(value = "获取所有图片为空的种类")
+    @GetMapping("/searchSpeciesWhereImageNull")
+    public Result searchSpeciesWhereImageNull(){
+        return speciesService.searchSpeciesWhereImageNull("branch/searchSpeciesWhereImageNull");
+    }
+    /**
+     * <p>种类插入图片</p>
+     * @author tfj
+     * @since 2021/6/17
+     */
+    @ApiOperation(value = "种类插入图片")
+    @GetMapping("/insertImageByName")
+    public Result insertImageByName(String name,String imageUrl){
+        return speciesService.insertImageByName(name,imageUrl,"branch/insertImageByName");
+    }
 }
 

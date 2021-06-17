@@ -1,9 +1,13 @@
 package hzpt.plants.directory.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Animals;
+import hzpt.plants.directory.entity.po.Plants;
 import hzpt.plants.directory.entity.vo.GetAnimalsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetAnimalsVo;
 import hzpt.plants.directory.mapper.AnimalsMapper;
@@ -44,13 +48,15 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
      * @since 2021/6/8
      */
     @Override
-    public List<GetAnimalsVo> fuzzyQueryAnimals(String name){
-        List<Animals> animalsList = animalsMapper.selectList(new QueryWrapper<Animals>().like("animalName", name)
+    public List<GetAnimalsVo> fuzzyQueryAnimals(String name,Integer currentPage){
+        QueryWrapper<Animals> queryWrapper= Wrappers.query();
+        queryWrapper.like("animalName", name)
                 .or().like("alias",name)
-                .or().like("description",name)
                 .or().like("address",name)
-                .or().like("remarks",name));
-        return  BeansUtils.listCopy(animalsList, GetAnimalsVo.class);
+                .or().like("remarks",name);
+        Page<Animals> page=new Page<>(currentPage,8);
+        IPage<Animals> animalsList=animalsMapper.selectPage(page,queryWrapper);
+        return  BeansUtils.listCopy(animalsList.getRecords(), GetAnimalsVo.class);
     }
 
     /**

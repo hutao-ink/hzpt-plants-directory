@@ -32,4 +32,10 @@ public interface GenusService extends IService<Genus> {
      * @since 2021/6/7
      */
     Result searchGenusByBranchId(String id, String path);
+    /**
+     * <p>通过属名获取属信息</p>
+     * @author tfj
+     * @since 2021/6/16
+     */
+    Result getGenusInfo(String genus, String path);
 }

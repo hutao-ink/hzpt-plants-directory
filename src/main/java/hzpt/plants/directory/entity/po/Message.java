@@ -22,9 +22,9 @@ public class Message {
 
     private String id;
 
-    @ApiModelProperty(value = "用户id")
-    @TableField("userId")
-    private String userId;
+    @ApiModelProperty(value = "用户凭证")
+    @TableField("openId")
+    private String openId;
 
     @ApiModelProperty(value = "留言信息")
     @TableField("userMessage")

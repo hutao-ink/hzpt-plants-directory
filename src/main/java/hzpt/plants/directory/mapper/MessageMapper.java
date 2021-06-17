@@ -12,7 +12,7 @@ import java.util.List;
  * @Description:
  */
 public interface MessageMapper extends BaseMapper<Message> {
-    List<GetMessagesVo> getUserMessageById(String userId);
+    List<GetMessagesVo> getUserMessageById(String openId);
 
     List<GetMessagesVo> getAllMessage();
 }

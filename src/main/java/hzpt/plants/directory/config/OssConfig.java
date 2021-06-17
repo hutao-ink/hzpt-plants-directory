@@ -2,12 +2,12 @@ package hzpt.plants.directory.config;
 
 
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 /**
  * <p></p>
@@ -33,7 +33,12 @@ public class OssConfig {
     private String domain;
 
     @Bean
-    public OSS OssClient(){
+    @Scope("prototype")
+    public OSS ossClient(){
         return new OSSClientBuilder().build(endpoint,accessKeyId,accessKeySecret);
     }
+
+//    private OSS getOssClient(){
+//        return OssConfig.ossClient();
+//    }
 }

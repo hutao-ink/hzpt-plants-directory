@@ -31,4 +31,16 @@ public interface SpeciesService extends IService<Species> {
      * @since 2021/6/7
      */
     Result searchSpeciesByGenusId(String id, String path);
+    /**
+     * <p>种类插入图片</p>
+     * @author tfj
+     * @since 2021/6/17
+     */
+    Result insertImageByName(String name, String imageUrl, String path);
+    /**
+     * <p>获取所有图片为空的种类</p>
+     * @author tfj
+     * @since 2021/6/17
+     */
+    Result searchSpeciesWhereImageNull(String path);
 }

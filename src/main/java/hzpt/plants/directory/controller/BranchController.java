@@ -78,6 +78,17 @@ public class BranchController {
     }
 
 
+    /**
+     * <p>通过科名获取科信息</p>
+     * @author tfj
+     * @since 2021/6/16
+     */
+    @ApiOperation(value = "通过科名获取科信息")
+    @GetMapping("/getBranchInfo")
+    public Result getBranchInfo(@RequestParam String branch){
+        return branchService.getBranchInfo(branch,"/genus/getBranchInfo");
+    }
+
 
 }
 

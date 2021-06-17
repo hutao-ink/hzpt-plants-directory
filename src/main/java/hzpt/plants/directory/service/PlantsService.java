@@ -45,7 +45,7 @@ public interface PlantsService extends IService<Plants> {
      * @author tfj
      * @since 2021/6/8
      */
-    List<GetPlantsVo> fuzzyQueryPlants(String name);
+    List<GetPlantsVo> fuzzyQueryPlants(String name,Integer currentPage);
     /**
      * <p>通过植物id查询植物所有信息</p>
      * @author tfj

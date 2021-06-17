@@ -17,7 +17,7 @@ public interface UserService extends IService<User> {
      * @author tfj
      * @since 2021/6/8
      */
-    Result fuzzyQuery(String name, String path);
+    Result fuzzyQuery(String name,Integer currentPage, String path);
     /**
      * <p>微信用户获取登录凭证</p>
      * @author tfj
@@ -41,13 +41,13 @@ public interface UserService extends IService<User> {
      * @author tfj
      * @since 2021/6/13
      */
-    Result userAddMessage(String message,String userId,String messageId, String path);
+    Result userAddMessage(String message,String openId,String messageId, String path);
     /**
      * <p>通过用户id获取用户留言</p>
      * @author tfj
      * @since 2021/6/13
      */
-    Result getUserMessageById(String userId, String path);
+    Result getUserMessageById(String openId, String path);
     /**
      * <p>获取所有用户留言信息</p>
      * @author tfj
@@ -59,5 +59,5 @@ public interface UserService extends IService<User> {
      * @author tfj
      * @since 2021/6/13
      */
-    Result userAddImages(MultipartFile multipartFile, String userId, String path);
+    Result userAddImages(MultipartFile multipartFile, String openId, String path);
 }

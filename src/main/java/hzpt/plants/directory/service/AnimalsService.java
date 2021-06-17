@@ -24,7 +24,7 @@ public interface AnimalsService extends IService<Animals> {
      * @author tfj
      * @since 2021/6/8
      */
-    List<GetAnimalsVo> fuzzyQueryAnimals(String name);
+    List<GetAnimalsVo> fuzzyQueryAnimals(String name,Integer currentPage);
     /**
      * <p>通过动物id获取动物所有信息</p>
      * @author tfj

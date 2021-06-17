@@ -7,15 +7,11 @@ import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.entity.po.Genus;
 import hzpt.plants.directory.entity.po.Plants;
 import hzpt.plants.directory.entity.po.Species;
+import hzpt.plants.directory.entity.vo.GetMessagesVo;
 import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
-import hzpt.plants.directory.mapper.BranchMapper;
-import hzpt.plants.directory.mapper.GenusMapper;
-import hzpt.plants.directory.mapper.PlantsMapper;
-import hzpt.plants.directory.service.BranchService;
-import hzpt.plants.directory.service.GenusService;
-import hzpt.plants.directory.service.PlantsService;
-import hzpt.plants.directory.service.SpeciesService;
+import hzpt.plants.directory.mapper.*;
+import hzpt.plants.directory.service.*;
 import hzpt.plants.directory.utils.BeansUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
@@ -43,6 +39,10 @@ class HzptPlantsDirectoryApplicationTests {
     private GenusMapper genusMapper;
     @Resource
     private PlantsMapper plantsMapper;
+    @Resource
+    private MessageMapper messageMapper;
+    @Resource
+    private AnimalsService animalsService;
 
     @Test
     void contextLoads() {
@@ -54,8 +54,8 @@ class HzptPlantsDirectoryApplicationTests {
      */
     @Test
     public void insertBranch(){
-        List<Branch> branchList=new ArrayList<>(20);
-        for (int i = 0; i < 20; i++) {
+        List<Branch> branchList=new ArrayList<>(10);
+        for (int i = 0; i < 10; i++) {
             Branch branch=new Branch();
             branch.setId(IdUtil.simpleUUID());
             branch.setCreateTime(new Date());
@@ -70,8 +70,8 @@ class HzptPlantsDirectoryApplicationTests {
      */
     @Test
     public void insertGenus(){
-        List<Genus> genusList=new ArrayList<>(20);
-        for (int i = 0; i < 20; i++) {
+        List<Genus> genusList=new ArrayList<>(10);
+        for (int i = 0; i < 10; i++) {
             Genus genus=new Genus();
             genus.setId(IdUtil.simpleUUID());
             genus.setCreateTime(new Date());
@@ -86,8 +86,8 @@ class HzptPlantsDirectoryApplicationTests {
      */
     @Test
     public void insertSpecies(){
-        List<Species> speciesList=new ArrayList<>(20);
-        for (int i = 0; i < 20; i++) {
+        List<Species> speciesList=new ArrayList<>(10);
+        for (int i = 0; i < 10; i++) {
             Species species=new Species();
             species.setId(IdUtil.simpleUUID());
             species.setCreateTime(new Date());
@@ -134,10 +134,12 @@ class HzptPlantsDirectoryApplicationTests {
     @Test
     public void Count(){
         int plantsCount = plantsService.count();
+        int animalCount = animalsService.count();
         int branchCount = branchService.count();
         int genusCount = genusService.count();
         int speciesCount = speciesService.count();
         System.out.println("plantsCount===>"+plantsCount);
+        System.out.println("animalCount===>"+animalCount);
         System.out.println("speciesCount===>"+speciesCount);
         System.out.println("genusCount===>"+genusCount);
         System.out.println("branchCount===>"+branchCount);
@@ -145,7 +147,7 @@ class HzptPlantsDirectoryApplicationTests {
 
     @Test
     public void idCreate(){
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 41; i++) {
             String s = IdUtil.simpleUUID();
             System.out.println(s);
         }
@@ -155,6 +157,12 @@ class HzptPlantsDirectoryApplicationTests {
     public void searchPlantsAllInfo(){
         GetPlantsAllInfoVo plant = plantsMapper.searchPlantsAllInfo("de2a39aa3fbb4b08bd2c8ffb1bc45333");
         System.out.println(plant);
+    }
+
+    @Test
+    public void test5(){
+        List<GetMessagesVo> allMessage = messageMapper.getAllMessage();
+        allMessage.forEach(getMessagesVo -> System.out.println(getMessagesVo));
     }
 
 }

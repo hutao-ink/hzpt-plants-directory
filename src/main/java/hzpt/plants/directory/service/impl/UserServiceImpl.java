@@ -55,6 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private OssConfig ossConfig;
     @Resource
     private OSS ossClient;
+
     @Resource
     private MessageMapper messageMapper;
     /**
@@ -63,9 +64,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @since 2021/6/8
      */
     @Override
-    public Result fuzzyQuery(String name, String path) {
-        List<GetAnimalsVo> getAnimalsVos = animalsService.fuzzyQueryAnimals(name);
-        List<GetPlantsVo> getPlantsVos = plantsService.fuzzyQueryPlants(name);
+    public Result fuzzyQuery(String name,Integer currentPage, String path) {
+        List<GetAnimalsVo> getAnimalsVos = animalsService.fuzzyQueryAnimals(name,currentPage);
+        List<GetPlantsVo> getPlantsVos = plantsService.fuzzyQueryPlants(name,currentPage);
         if (getAnimalsVos.size()>0){
             return new Result().result200(getAnimalsVos,path);
         }else if (getPlantsVos.size()>0){
@@ -83,9 +84,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result userLoginWx(String code, String path) {
         User user=new User();
         CustomUserState responseEntity = wxConfig.getResponseEntity(code);
-        user.setOpenId(responseEntity.getOpenid());
         user.setId(IdUtil.simpleUUID());
-        userMapper.insert(user);
+        user.setOpenId(responseEntity.getOpenid());
+        user.setCreateTime(new Date());
+        User selectOne = userMapper.selectOne(new QueryWrapper<User>().eq("openId", user.getOpenId()));
+        if (selectOne!=null){
+            return new Result().result200(responseEntity,path);
+        }else {
+            userMapper.insert(user);
+        }
         return new Result().result200(responseEntity,path);
     }
 
@@ -126,7 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @since 2021/6/13
      */
     @Override
-    public Result userAddImages(MultipartFile multipartFile,String userId, String path) {
+    public Result userAddImages(MultipartFile multipartFile,String openId, String path) {
         if (multipartFile!=null){
             String originalFilename = multipartFile.getOriginalFilename();
 
@@ -137,12 +144,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 e.printStackTrace();
             }
             ossClient.putObject(putObjectRequest);
-            ossClient.shutdown();
+            //ossClient.shutdown();
             String imagesUrl=ossConfig.getDomain()+originalFilename;
             Message addMessage=new Message();
             addMessage.setId(IdUtil.simpleUUID());
             addMessage.setImagesUrl(imagesUrl);
-            addMessage.setUserId(userId);
+            addMessage.setOpenId(openId);
             addMessage.setCreateTime(new Date());
             messageMapper.insert(addMessage);
             return new Result().result200(addMessage.getId(),path);
@@ -157,7 +164,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @since 2021/6/13
      */
     @Override
-    public Result userAddMessage(String message, String userId,String messageId, String path) {
+    public Result userAddMessage(String message, String openId,String messageId, String path) {
         if (message==null){
             return new Result().result500("请填写:",path);
         }
@@ -169,7 +176,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }else {
             Message addMessage=new Message();
             addMessage.setId(IdUtil.simpleUUID());
-            addMessage.setUserId(userId);
+            addMessage.setOpenId(openId);
             addMessage.setUserMessage(message);
             addMessage.setCreateTime(new Date());
             messageMapper.insert(addMessage);
@@ -183,9 +190,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @since 2021/6/13
      */
     @Override
-    public Result getUserMessageById(String userId, String path) {
-        List<GetMessagesVo> messageList = messageMapper.getUserMessageById(userId);
-
+    public Result getUserMessageById(String openId, String path) {
+        List<GetMessagesVo> messageList = messageMapper.getUserMessageById(openId);
         return new Result().result200(messageList,path);
     }
     /**
