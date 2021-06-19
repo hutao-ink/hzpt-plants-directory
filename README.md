@@ -2,7 +2,7 @@
 
 **联系人**: 489516067@qq.com
 
-**服务Url：**https://hutao.ink/a/directory
+**服务Url**: https://hutao.ink/a/directory
 
 ---
 
