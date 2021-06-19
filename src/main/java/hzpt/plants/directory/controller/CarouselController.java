@@ -43,5 +43,4 @@ public class CarouselController {
         return carouselService.insertCarousel(carouselUrl,biologicalName,biologicalId,"/carousel/insertCarousel");
     }
 
-
 }

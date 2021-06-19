@@ -7,9 +7,9 @@ import hzpt.plants.directory.entity.po.User;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @Author: tfj
- * @Date: 2021/6/8 14
- * @Description:
+ * <p></p>
+ * @author tfj
+ * @since 2021/6/8
  */
 public interface UserService extends IService<User> {
     /**

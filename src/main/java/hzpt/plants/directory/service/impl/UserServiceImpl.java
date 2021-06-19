@@ -2,6 +2,8 @@ package hzpt.plants.directory.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -53,9 +55,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private PlantsMapper plantsMapper;
     @Resource
     private OssConfig ossConfig;
-    @Resource
-    private OSS ossClient;
-
     @Resource
     private MessageMapper messageMapper;
     /**
@@ -122,7 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Result getNewestTwentyBiological(String path) {
-        List<Plants> plantsList = plantsMapper.selectList(new QueryWrapper<Plants>().orderByAsc("createTime").last("limit 20"));
+        List<Plants> plantsList = plantsMapper.selectList(new QueryWrapper<Plants>().orderByDesc("createTime").last("limit 20"));
         List<GetPlantsVo> getPlantsVoList = BeansUtils.listCopy(plantsList, GetPlantsVo.class);
         return new Result().result200(getPlantsVoList,path);
     }
@@ -134,6 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Result userAddImages(MultipartFile multipartFile,String openId, String path) {
+        OSS ossClient=new OSSClientBuilder().build(ossConfig.getEndpoint(),ossConfig.getAccessKeyId(),ossConfig.getAccessKeySecret());
         if (multipartFile!=null){
             String originalFilename = multipartFile.getOriginalFilename();
 
@@ -144,8 +144,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 e.printStackTrace();
             }
             ossClient.putObject(putObjectRequest);
-            //ossClient.shutdown();
+            ossClient.shutdown();
+
             String imagesUrl=ossConfig.getDomain()+originalFilename;
+
             Message addMessage=new Message();
             addMessage.setId(IdUtil.simpleUUID());
             addMessage.setImagesUrl(imagesUrl);

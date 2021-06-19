@@ -5,6 +5,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -32,13 +33,4 @@ public class OssConfig {
     @Value("${aliyun.oss.domain}")
     private String domain;
 
-    @Bean
-    @Scope("prototype")
-    public OSS ossClient(){
-        return new OSSClientBuilder().build(endpoint,accessKeyId,accessKeySecret);
-    }
-
-//    private OSS getOssClient(){
-//        return OssConfig.ossClient();
-//    }
 }
