@@ -16,6 +16,5 @@ import java.util.List;
  */
 public interface SpeciesMapper extends BaseMapper<Species> {
 
-    @Select("select * from tbl_species where imagesUrl is null;")
-    List<Species> searchSpeciesWhereImageNull();
+
 }

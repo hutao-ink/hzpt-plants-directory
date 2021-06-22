@@ -16,6 +16,9 @@ import hzpt.plants.directory.utils.BeansUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.types.RedisClientInfo;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -43,6 +46,10 @@ class HzptPlantsDirectoryApplicationTests {
     private MessageMapper messageMapper;
     @Resource
     private AnimalsService animalsService;
+    @Resource
+    private RedisTemplate<String,Object> redisTemplate;
+    @Resource
+    private UserMapper userMapper;
 
     @Test
     void contextLoads() {
@@ -163,6 +170,18 @@ class HzptPlantsDirectoryApplicationTests {
     public void test5(){
         List<GetMessagesVo> allMessage = messageMapper.getAllMessage();
         allMessage.forEach(getMessagesVo -> System.out.println(getMessagesVo));
+    }
+
+    @Test
+    public void testRedis(){
+        RedisConnectionFactory connectionFactory = redisTemplate.getConnectionFactory();
+        System.out.println(connectionFactory);
+    }
+
+    @Test
+    public void getRole(){
+        String permission = userMapper.getPermissionByNickName("渡己");
+        System.out.println(permission);
     }
 
 }

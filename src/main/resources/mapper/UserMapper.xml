@@ -3,5 +3,28 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="hzpt.plants.directory.mapper.UserMapper">
+    <select id="getPermissionByNickName" resultType="java.lang.String">
+        SELECT
+            permission.permissionName
+        FROM tbl_user AS user
+                 LEFT JOIN tbl_user_permission AS userPermission ON user.openId = userPermission.openId
+                 LEFT JOIN tbl_permission AS permission ON permission.id = userPermission.permissionId
+        WHERE user.nickName = #{name}
+    </select>
+
+    <select id="getAllUserInfo" resultType="hzpt.plants.directory.entity.vo.GetUserInfoVo">
+        SELECT
+            user.openId as openId,
+            user.nickName as nickName,
+            user.imageUrl as imageUrl,
+            user.city as city,
+            user.createTime as createTime,
+            permission.permissionName
+        FROM
+            tbl_user AS user
+			LEFT JOIN tbl_user_permission AS userPermission ON user.openId = userPermission.openId
+            LEFT JOIN tbl_permission AS permission ON permission.id = userPermission.permissionId
+    </select>
+
 
 </mapper>

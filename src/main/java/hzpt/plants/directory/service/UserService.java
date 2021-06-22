@@ -60,4 +60,5 @@ public interface UserService extends IService<User> {
      * @since 2021/6/13
      */
     Result userAddImages(MultipartFile multipartFile, String openId, String path);
+
 }

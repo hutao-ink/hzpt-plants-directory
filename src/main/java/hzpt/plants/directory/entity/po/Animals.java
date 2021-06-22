@@ -50,4 +50,7 @@ public class Animals {
     @TableField("createTime")
     private Date createTime;
 
+    @TableField("modifyTime")
+    private Date modifyTime;
+
 }

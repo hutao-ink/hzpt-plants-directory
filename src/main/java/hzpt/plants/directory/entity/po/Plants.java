@@ -59,4 +59,7 @@ public class Plants implements Serializable {
     @ApiModelProperty(value = "创建时间")
     @TableField("createTime")
     private Date createTime;
+
+    @TableField("modifyTime")
+    private Date modifyTime;
 }

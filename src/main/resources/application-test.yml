@@ -13,27 +13,44 @@ mybatis-plus:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://47.118.66.86:3306/directory?serverTimezone=Asia/Shanghai
-    username: hutao
-    password: Tfj@27599
+    url: jdbc:mysql://ip/directory?serverTimezone=Asia/Shanghai
+    username: ###
+    password: ###
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: ###
+    port: 6379
+    password: ###
+    client-type: jedis
+    jedis:
+      pool:
+        #        最大连接数
+        max-active: 8
+        #        最大空闲连接数
+        max-idle: 1000
+        min-idle: 0
+        max-wait: -1
+    sa-token:
+      token-style: simple-uuid
 
+    session:
+      store-type: redis
 
 aliyun:
   oss:
     # API鉴权
-    accessKeyId: LTAI5tJQBA1ZcGTScwjd3xDz
+    accessKeyId: ###
     # 访问身份验证中用到用户标识
-    accessKeySecret: 2UWGewaH5GwcxXU4UAELegNq5BmTgN
+    accessKeySecret: ###
     # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
     # oss访问域名（内网）
-    endpoint: oss-cn-hangzhou.aliyuncs.com
-    bucketName: hutao-ink # oss的存储空间
-    domain: http://hutao-ink.oss-cn-hangzhou.aliyuncs.com/
+    endpoint: ###
+    bucketName: ### # oss的存储空间
+    domain: ###
     policyExpire: 3000 # url有效期(S)
     maxSize: 100M # 上传文件大小(M)
 
 
 wx:
-  appId: wx647e044dbe45ed37
-  AppSecret: 92e7bcb50b880b483a182557e3453307
+  appId: ###
+  AppSecret: ###

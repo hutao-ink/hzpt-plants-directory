@@ -1,5 +1,6 @@
 package hzpt.plants.directory.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostUserDto;
 import hzpt.plants.directory.service.UserService;
@@ -73,6 +74,9 @@ public class UserController {
     @ApiOperation(value = "用户上传图片")
     @PostMapping(value = "/userAddImages")
     public Result userAddImages(@RequestParam String openId,@RequestPart MultipartFile file) {
+        if (StpUtil.hasRole("黑名单")){
+            return new Result().result403("已被拉黑，无法上传图片","/user/userAddImages");
+        }
         return userService.userAddImages(file,openId,"/user/userAddImages");
     }
 
@@ -84,6 +88,9 @@ public class UserController {
     @ApiOperation(value = "用户留言")
     @GetMapping(value = "/userAddMessage")
     public Result userAddMessage(@RequestParam String message,String openId,String messageId){
+        if (StpUtil.hasRole("黑名单")){
+            return new Result().result403("已被拉黑，无法留言","/user/userAddImages");
+        }
         return userService.userAddMessage(message,openId,messageId,"/user/userAddMessage");
     }
 

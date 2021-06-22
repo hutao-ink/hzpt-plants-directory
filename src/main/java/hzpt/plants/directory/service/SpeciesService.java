@@ -1,8 +1,10 @@
 package hzpt.plants.directory.service;
 
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.dto.PostSpeciesDto;
 import hzpt.plants.directory.entity.po.Species;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -18,7 +20,7 @@ public interface SpeciesService extends IService<Species> {
      * @author tfj
      * @since 2021/6/7
      */
-    Result insertSpecies(String species, String genusId, String path);
+    Result insertSpecies(PostSpeciesDto postSpeciesDto, String path);
     /**
      * <p>查询所有种类</p>
      * @author tfj
@@ -34,13 +36,13 @@ public interface SpeciesService extends IService<Species> {
     /**
      * <p>种类插入图片</p>
      * @author tfj
-     * @since 2021/6/17
+     * @since 2021/6/22
      */
-    Result insertImageByName(String name, String imageUrl, String path);
+    Result insertImageById(String speciesId, MultipartFile file, String path);
     /**
-     * <p>获取所有图片为空的种类</p>
+     * <p>删除物种</p>
      * @author tfj
-     * @since 2021/6/17
+     * @since 2021/6/22
      */
-    Result searchSpeciesWhereImageNull(String path);
+    Result deleteSpecies(String speciesId, String path);
 }

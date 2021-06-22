@@ -1,6 +1,7 @@
 package hzpt.plants.directory.service;
 
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.dto.PostGenusDto;
 import hzpt.plants.directory.entity.po.Genus;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -38,4 +39,16 @@ public interface GenusService extends IService<Genus> {
      * @since 2021/6/16
      */
     Result getGenusInfo(String genus, String path);
+    /**
+     * <p>修改属目</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    Result putGenusById(PostGenusDto postGenusDto, String path);
+    /**
+     * <p>删除属目</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    Result deleteGenus(String genusId, String path);
 }

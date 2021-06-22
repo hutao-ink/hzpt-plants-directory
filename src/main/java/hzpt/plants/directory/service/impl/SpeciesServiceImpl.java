@@ -1,15 +1,23 @@
 package hzpt.plants.directory.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.config.OssConfig;
+import hzpt.plants.directory.entity.dto.PostSpeciesDto;
 import hzpt.plants.directory.entity.po.Species;
 import hzpt.plants.directory.mapper.SpeciesMapper;
 import hzpt.plants.directory.service.SpeciesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -25,20 +33,22 @@ import java.util.List;
 public class SpeciesServiceImpl extends ServiceImpl<SpeciesMapper, Species> implements SpeciesService {
     @Resource
     private SpeciesMapper speciesMapper;
+    @Resource
+    private OssConfig ossConfig;
     /**
      * <p>添加种类</p>
      * @author tfj
      * @since 2021/6/7
      */
     @Override
-    public Result insertSpecies(String species, String genusId, String path) {
+    public Result insertSpecies(PostSpeciesDto postSpeciesDto, String path) {
         Species species1=new Species();
         species1.setId(IdUtil.simpleUUID());
-        species1.setSpecies(species);
-        species1.setGenusId(genusId);
+        species1.setSpecies(postSpeciesDto.getSpecies());
+        species1.setGenusId(postSpeciesDto.getGenusId());
         species1.setCreateTime(new Date());
         if (speciesMapper.insert(species1)==1){
-            return new Result().result200("添加成功",path);
+            return new Result().result200(species1.getId(),path);
         }
         return new Result().result500("添加失败",path);
     }
@@ -62,30 +72,47 @@ public class SpeciesServiceImpl extends ServiceImpl<SpeciesMapper, Species> impl
         List<Species> speciesList = speciesMapper.selectList(new QueryWrapper<Species>().eq("genusId", id));
         return new Result().result200(speciesList,path);
     }
+
     /**
      * <p>种类插入图片</p>
      * @author tfj
-     * @since 2021/6/17
+     * @since 2021/6/22
      */
     @Override
-    public Result insertImageByName(String name, String imageUrl, String path) {
-        Species selectOne = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", name));
-        if (selectOne==null){
-            return new Result().result500("不存在该物种",path);
-        }else {
-            selectOne.setImagesUrl(imageUrl);
-            speciesMapper.updateById(selectOne);
-            return new Result().result200("插入图片成功",path);
+    public Result insertImageById(String speciesId, MultipartFile file, String path) {
+        OSS ossClient = new OSSClientBuilder().build(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());
+        if (file != null) {
+
+            String originalFilename = file.getOriginalFilename();
+
+            PutObjectRequest putObjectRequest = null;
+            try {
+                putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(file.getBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ossClient.putObject(putObjectRequest);
+            ossClient.shutdown();
+
+            String imagesUrl = ossConfig.getDomain() + originalFilename;
+            Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("id", speciesId));
+            species.setImagesUrl(imagesUrl);
+            species.setModifyTime(new Date());
+            speciesMapper.updateById(species);
+            return new Result().result200("修改属类图片成功",path);
         }
+        return new Result().result500("修改属类图片失败",path);
     }
     /**
-     * <p>获取所有图片为空的种类</p>
+     * <p>删除物种</p>
      * @author tfj
-     * @since 2021/6/17
+     * @since 2021/6/22
      */
     @Override
-    public Result searchSpeciesWhereImageNull(String path) {
-        List<Species> imagesUrl = speciesMapper.searchSpeciesWhereImageNull();
-        return new Result().result200(imagesUrl,path);
+    public Result deleteSpecies(String speciesId, String path) {
+        if (speciesMapper.deleteById(speciesId)==1){
+            return new Result().result200("删除物种失败",path);
+        }
+        return new Result().result500("删除物种失败",path);
     }
 }

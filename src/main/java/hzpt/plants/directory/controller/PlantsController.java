@@ -22,18 +22,6 @@ public class PlantsController {
     private PlantsService plantsService;
 
     /**
-     * <p>添加植物</p>
-     * @author tfj
-     * @since 2021/6/7
-     */
-    @ApiOperation(value = "添加植物")
-    @PostMapping("/insertPlant")
-    public Result insertPlant(@RequestParam String plantName, String alias
-    ,String imagesUrl,String description,String speciesId,String address){
-        return plantsService.insertPlant(plantName,alias,imagesUrl,description,speciesId,address,"/plants/insertPlant");
-    }
-
-    /**
      * <p>获取植物总数</p>
      * @author tfj
      * @since 2021/6/7
@@ -89,6 +77,18 @@ public class PlantsController {
     @GetMapping("/queryPlantById")
     public Result queryPlantById(@RequestParam String id){
         return plantsService.queryPlantById(id,"/plants/queryPlantById");
+    }
+
+    /**
+     * <p>添加植物</p>
+     * @author tfj
+     * @since 2021/6/7
+     */
+    @ApiOperation(value = "添加植物")
+    @PostMapping("/insertPlant")
+    public Result insertPlant(@RequestParam String plantName, String alias
+            ,String imagesUrl,String description,String speciesId,String address){
+        return plantsService.insertPlant(plantName,alias,imagesUrl,description,speciesId,address,"/plants/insertPlant");
     }
 
 }

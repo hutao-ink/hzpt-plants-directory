@@ -30,4 +30,16 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
         List<Message> messages = messageMapper.selectList(new QueryWrapper<>());
         return new Result().result200(messages,path);
     }
+    /**
+     * <p>删除用户留言</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    @Override
+    public Result deleteUserMessages(String messageId, String path) {
+        if (messageMapper.deleteById(messageId)==1){
+            return new Result().result200("修改成功",path);
+        }
+        return new Result().result500("修改失败",path);
+    }
 }

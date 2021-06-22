@@ -1,10 +1,13 @@
 package hzpt.plants.directory.controller;
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.dto.PostSpeciesDto;
 import hzpt.plants.directory.service.SpeciesService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -21,17 +24,6 @@ import javax.annotation.Resource;
 public class SpeciesController {
     @Resource
     private SpeciesService speciesService;
-    /**
-     * <p>添加种类</p>
-     * @author tfj
-     * @since 2021/6/7
-     */
-    @ApiOperation(value = "添加种类")
-    @PostMapping("/insertSpecies")
-    public Result insertSpecies(@RequestParam String species,String genusId){
-        return speciesService.insertSpecies(species,genusId,"/species/insertSpecies");
-    }
-
     /**
      * <p>获取种总数</p>
      * @author tfj
@@ -66,24 +58,47 @@ public class SpeciesController {
     }
 
     /**
-     * <p>获取所有图片为空的种类</p>
+     * <p>添加种类</p>
      * @author tfj
-     * @since 2021/6/17
+     * @since 2021/6/7
      */
-    @ApiOperation(value = "获取所有图片为空的种类")
-    @GetMapping("/searchSpeciesWhereImageNull")
-    public Result searchSpeciesWhereImageNull(){
-        return speciesService.searchSpeciesWhereImageNull("branch/searchSpeciesWhereImageNull");
+    @ApiOperation(value = "添加种类")
+    @PostMapping("/insertSpecies")
+    public Result insertSpecies(@RequestBody PostSpeciesDto postSpeciesDto){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","species/insertSpecies");
+        }
+        return speciesService.insertSpecies(postSpeciesDto,"species/insertSpecies");
     }
+
     /**
      * <p>种类插入图片</p>
      * @author tfj
      * @since 2021/6/17
      */
     @ApiOperation(value = "种类插入图片")
-    @GetMapping("/insertImageByName")
-    public Result insertImageByName(String name,String imageUrl){
-        return speciesService.insertImageByName(name,imageUrl,"branch/insertImageByName");
+    @PostMapping("/insertImageById")
+    public Result insertImageByName(@RequestParam String speciesId,@RequestPart MultipartFile file){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","species/insertImageById");
+        }
+        return speciesService.insertImageById(speciesId,file,"species/insertImageById");
     }
+
+    /**
+     * <p>删除物种</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    @ApiOperation(value = "删除物种")
+    @DeleteMapping("/deleteSpecies")
+    public Result deleteSpecies(@RequestParam String speciesId){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","species/deleteSpecies");
+        }
+        return speciesService.deleteSpecies(speciesId,"species/deleteSpecies");
+    }
+
+
 }
 

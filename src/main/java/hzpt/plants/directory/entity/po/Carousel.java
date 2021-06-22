@@ -2,6 +2,7 @@ package hzpt.plants.directory.entity.po;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
@@ -40,10 +41,15 @@ public class Carousel implements Serializable {
      @TableField("biologicalName")
      private String biologicalName;
 
+    @TableField("deleted")
+    @TableLogic
+    private int deleted;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("createTime")
     private Date createTime;
 
+    @TableField("modifyTime")
+    private Date modifyTime;
 
 }

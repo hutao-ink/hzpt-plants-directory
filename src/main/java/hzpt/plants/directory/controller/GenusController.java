@@ -1,7 +1,9 @@
 package hzpt.plants.directory.controller;
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.dto.PostGenusDto;
 import hzpt.plants.directory.service.GenusService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +23,6 @@ import javax.annotation.Resource;
 public class GenusController {
     @Resource
     private GenusService genusService;
-    /**
-     * <p>添加属目</p>
-     * @author tfj
-     * @since 2021/6/7
-     */
-    @ApiOperation(value = "添加属目")
-    @PostMapping("/insertGenus")
-    public Result insertGenus(@RequestParam String genus,String branchId){
-        return genusService.insertGenus(genus,branchId,"/genus/insertGenus");
-    }
     /**
      * <p>获取属总数</p>
      * @author tfj
@@ -75,5 +67,46 @@ public class GenusController {
     public Result getGenusInfo(@RequestParam String genus){
         return genusService.getGenusInfo(genus,"/genus/getGenusInfo");
     }
+
+    /**
+     * <p>添加属目</p>
+     * @author tfj
+     * @since 2021/6/7
+     */
+    @ApiOperation(value = "添加属目")
+    @PostMapping("/insertGenus")
+    public Result insertGenus(@RequestParam String genus,String branchId){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","genus/insertGenus");
+        }
+        return genusService.insertGenus(genus,branchId,"genus/insertGenus");
+    }
+    /**
+     * <p>修改属目</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    @ApiOperation(value = "修改属目")
+    @PutMapping("/putGenusById")
+    public Result putGenusById(@RequestBody PostGenusDto postGenusDto){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","genus/insertGenus");
+        }
+        return genusService.putGenusById(postGenusDto,"genus/insertGenus");
+    }
+    /**
+     * <p>删除属目</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    @ApiOperation(value = "删除属目")
+    @DeleteMapping("/deleteGenus")
+    public Result deleteGenus(@RequestParam String genusId){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","genus/deleteGenus");
+        }
+        return genusService.deleteGenus(genusId,"genus/deleteGenus");
+    }
+
 }
 

@@ -2,7 +2,6 @@ package hzpt.plants.directory.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -10,24 +9,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.config.OssConfig;
 import hzpt.plants.directory.entity.dto.PostUserDto;
-import hzpt.plants.directory.entity.po.CustomUserState;
-import hzpt.plants.directory.entity.po.Message;
-import hzpt.plants.directory.entity.po.Plants;
-import hzpt.plants.directory.entity.po.User;
+import hzpt.plants.directory.entity.po.*;
 import hzpt.plants.directory.entity.vo.GetAnimalsVo;
 import hzpt.plants.directory.entity.vo.GetMessagesVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
-import hzpt.plants.directory.mapper.MessageMapper;
-import hzpt.plants.directory.mapper.PlantsMapper;
-import hzpt.plants.directory.mapper.UserMapper;
+import hzpt.plants.directory.mapper.*;
 import hzpt.plants.directory.service.AnimalsService;
 import hzpt.plants.directory.service.PlantsService;
 import hzpt.plants.directory.service.UserService;
 import hzpt.plants.directory.config.WxConfig;
 import hzpt.plants.directory.utils.BeansUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -57,6 +51,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private OssConfig ossConfig;
     @Resource
     private MessageMapper messageMapper;
+    @Resource
+    private UserPermissionMapper userPermissionMapper;
+    @Resource
+    private PermissionMapper permissionMapper;
     /**
      * <p>用户搜索动植物</p>
      * @author tfj
@@ -110,7 +108,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         getUser.setProvince(postUserDto.getProvince());
         getUser.setCountry(postUserDto.getCountry());
         getUser.setCreateTime(new Date());
+
         userMapper.update(getUser,new QueryWrapper<User>().eq("openId",postUserDto.getOpenId()));
+
+        Permission permission = permissionMapper.selectOne(new QueryWrapper<Permission>().eq("permissionName", "普通用户"));
+
+        UserPermission userPermission=new UserPermission();
+        userPermission.setId(IdUtil.simpleUUID());
+        userPermission.setOpenId(postUserDto.getOpenId());
+        userPermission.setCreateTime(new Date());
+        userPermission.setPermissionId(permission.getId());
+
+        userPermissionMapper.insert(userPermission);
+
         return new Result().result200(getUser.toString(),path);
     }
 
@@ -153,9 +163,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             addMessage.setImagesUrl(imagesUrl);
             addMessage.setOpenId(openId);
             addMessage.setCreateTime(new Date());
-            messageMapper.insert(addMessage);
-            return new Result().result200(addMessage.getId(),path);
 
+            messageMapper.insert(addMessage);
+
+            Message message = messageMapper.selectOne(new QueryWrapper<Message>().eq("id", addMessage.getId()));
+            if (message.getUserMessage()==null){
+                messageMapper.delete(new QueryWrapper<Message>().eq("userMessage",null));
+            }
+            return new Result().result200(addMessage.getId(),path);
         }else {
             return new Result().result200("请选择图片:",path);
         }
@@ -167,8 +182,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Result userAddMessage(String message, String openId,String messageId, String path) {
-        if (message==null){
-            return new Result().result500("请填写:",path);
+        if (message.getBytes().length<=10){
+            return new Result().result500("留言不得少于5个字:",path);
         }
         Message selectOne = messageMapper.selectOne(new QueryWrapper<Message>().eq("id", messageId));
         if (selectOne!=null){

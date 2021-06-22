@@ -44,5 +44,7 @@ public class Species implements Serializable {
     @TableField("createTime")
     private Date createTime;
 
+    @TableField("modifyTime")
+    private Date modifyTime;
 
 }

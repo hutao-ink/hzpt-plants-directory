@@ -2,6 +2,7 @@ package hzpt.plants.directory.entity.po;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -36,9 +37,15 @@ public class Genus implements Serializable {
     @TableField("branchId")
     private String branchId;
 
+    @TableField("deleted")
+    @TableLogic
+    private int deleted;
+
     @ApiModelProperty(value = "创建时间")
     @TableField("createTime")
     private Date createTime;
 
+    @TableField("modifyTime")
+    private Date modifyTime;
 
 }
