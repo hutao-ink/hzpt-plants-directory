@@ -1,31 +1,23 @@
-package hzpt.plants.directory.entity.vo;
+package hzpt.plants.directory.entity.dto;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 /**
  * <p></p>
  * @author tfj
- * @since 2021/6/9
+ * @since 2021/6/23
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-@TableName("tbl_plants")
-@ApiModel(value="Plants对象", description="植物信息类")
-public class GetPlantsAllInfoVo {
-
+public class PostAnimalsDto {
     private String id ;
 
-    @ApiModelProperty(value = "植物名称")
-    @TableField("plantName")
-    private String plantName;
+    @ApiModelProperty(value = "动物名称")
+    @TableField("animalName")
+    private String animalName;
 
     @ApiModelProperty(value = "别名")
     private String alias;
@@ -35,15 +27,19 @@ public class GetPlantsAllInfoVo {
     private String imagesUrl;
 
     @ApiModelProperty(value = "描述信息")
+    @TableField("description")
     private String description;
 
-    @ApiModelProperty(value = "分布区域id")
+    @ApiModelProperty(value = "分布区域")
     @TableField("address")
     private String address;
 
     @ApiModelProperty(value = "备注")
     @TableField("remarks")
     private String remarks;
+
+    @TableField("modifyTime")
+    private Date modifyTime;
 
     @ApiModelProperty(value = "科")
     @TableField("branch")
@@ -56,9 +52,4 @@ public class GetPlantsAllInfoVo {
     @ApiModelProperty(value = "种")
     @TableField("species")
     private String species;
-
-    @ApiModelProperty(value = "创建时间")
-    @TableField("createTime")
-    private Date createTime;
-
 }

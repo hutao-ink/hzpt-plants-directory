@@ -43,6 +43,10 @@ public class Animals {
     @TableField("address")
     private String address;
 
+    @ApiModelProperty(value = "备注")
+    @TableField("remarks")
+    private String remarks;
+
     @ApiModelProperty(value = "逻辑删除，1删除，0没删除")
     private Integer deleted;
 

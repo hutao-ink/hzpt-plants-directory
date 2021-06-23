@@ -14,4 +14,6 @@ public interface UserMapper extends BaseMapper<User>{
 
 
     List<GetUserInfoVo> getAllUserInfo();
+
+    String getUserRole(String nickName);
 }

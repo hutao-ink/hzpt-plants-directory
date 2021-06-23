@@ -74,9 +74,9 @@ public class UserController {
     @ApiOperation(value = "用户上传图片")
     @PostMapping(value = "/userAddImages")
     public Result userAddImages(@RequestParam String openId,@RequestPart MultipartFile file) {
-        if (StpUtil.hasRole("黑名单")){
-            return new Result().result403("已被拉黑，无法上传图片","/user/userAddImages");
-        }
+//        if (StpUtil.hasRole("黑名单")){
+//            return new Result().result403("已被拉黑，无法上传图片","/user/userAddImages");
+//        }
         return userService.userAddImages(file,openId,"/user/userAddImages");
     }
 
@@ -88,9 +88,9 @@ public class UserController {
     @ApiOperation(value = "用户留言")
     @GetMapping(value = "/userAddMessage")
     public Result userAddMessage(@RequestParam String message,String openId,String messageId){
-        if (StpUtil.hasRole("黑名单")){
-            return new Result().result403("已被拉黑，无法留言","/user/userAddImages");
-        }
+//        if (StpUtil.hasRole("黑名单")){
+//            return new Result().result403("已被拉黑，无法留言","/user/userAddMessage");
+//        }
         return userService.userAddMessage(message,openId,messageId,"/user/userAddMessage");
     }
 

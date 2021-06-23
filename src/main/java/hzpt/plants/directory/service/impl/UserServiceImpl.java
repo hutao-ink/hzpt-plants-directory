@@ -1,5 +1,6 @@
 package hzpt.plants.directory.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.IdUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
@@ -26,7 +27,9 @@ import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -86,6 +89,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setCreateTime(new Date());
         User selectOne = userMapper.selectOne(new QueryWrapper<User>().eq("openId", user.getOpenId()));
         if (selectOne!=null){
+            StpUtil.setLoginId(selectOne.getNickName());
+            System.out.println(selectOne.getNickName());
             return new Result().result200(responseEntity,path);
         }else {
             userMapper.insert(user);
@@ -108,6 +113,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         getUser.setProvince(postUserDto.getProvince());
         getUser.setCountry(postUserDto.getCountry());
         getUser.setCreateTime(new Date());
+
+
+        StpUtil.setLoginId(getUser.getNickName());
 
         userMapper.update(getUser,new QueryWrapper<User>().eq("openId",postUserDto.getOpenId()));
 

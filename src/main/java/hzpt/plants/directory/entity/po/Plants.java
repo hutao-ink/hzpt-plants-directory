@@ -45,7 +45,7 @@ public class Plants implements Serializable {
     @TableField("speciesId")
     private String speciesId;
 
-    @ApiModelProperty(value = "分布区域id")
+    @ApiModelProperty(value = "分布区域")
     @TableField("address")
     private String address;
 

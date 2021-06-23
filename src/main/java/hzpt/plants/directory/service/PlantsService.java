@@ -1,6 +1,7 @@
 package hzpt.plants.directory.service;
 
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.dto.PostPlantsDto;
 import hzpt.plants.directory.entity.po.Plants;
 import com.baomidou.mybatisplus.extension.service.IService;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
@@ -16,12 +17,6 @@ import java.util.List;
  * @since 2021-06-06
  */
 public interface PlantsService extends IService<Plants> {
-    /**
-     * <p>添加植物</p>
-     * @author tfj
-     * @since 2021/6/7
-     */
-    Result insertPlant(String plantName, String alias, String imagesUrl, String description, String speciesId, String address, String path);
     /**
      * <p>查询所有植物</p>
      * @author tfj
@@ -52,4 +47,22 @@ public interface PlantsService extends IService<Plants> {
      * @since 2021/6/7
      */
     Result queryPlantById(String id, String path);
+    /**
+     * <p>添加植物</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    Result insertPlant(PostPlantsDto postPlantsDto, String path);
+    /**
+     * <p>修改植物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    Result putPlantById(PostPlantsDto postPlantsDto, String plantId, String path);
+    /**
+     * <p>删除植物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    Result deletePlantById(String plantId, String path);
 }

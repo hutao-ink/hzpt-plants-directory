@@ -128,7 +128,7 @@ public class BranchController {
      * @author tfj
      * @since 2021/6/22
      */
-    @ApiOperation(value = "")
+    @ApiOperation(value = "修改科目信息")
     @PutMapping("/putBranchById")
     public Result putBranchById(@RequestBody PostBranchDto postBranchDto){
         if (!StpUtil.hasRole("管理员")){
@@ -141,7 +141,7 @@ public class BranchController {
      * @author tfj
      * @since 2021/6/22
      */
-    @ApiOperation(value = "")
+    @ApiOperation(value = "修改科目图片")
     @PutMapping("/putBranchImage")
     public Result putBranchImage(@RequestPart MultipartFile file,@RequestParam String branchId){
         if (!StpUtil.hasRole("管理员")){

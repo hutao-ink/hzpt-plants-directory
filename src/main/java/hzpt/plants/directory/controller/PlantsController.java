@@ -1,7 +1,9 @@
 package hzpt.plants.directory.controller;
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.dto.PostPlantsDto;
 import hzpt.plants.directory.service.PlantsService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +69,6 @@ public class PlantsController {
         return plantsService.fuzzyQuery(name,currentPage,"/plants/fuzzyQuery");
     }
 
-
     /**
      * <p>通过生物id查询植物所有信息</p>
      * @author tfj
@@ -82,13 +83,41 @@ public class PlantsController {
     /**
      * <p>添加植物</p>
      * @author tfj
-     * @since 2021/6/7
+     * @since 2021/6/22
      */
     @ApiOperation(value = "添加植物")
     @PostMapping("/insertPlant")
-    public Result insertPlant(@RequestParam String plantName, String alias
-            ,String imagesUrl,String description,String speciesId,String address){
-        return plantsService.insertPlant(plantName,alias,imagesUrl,description,speciesId,address,"/plants/insertPlant");
+    public Result insertPlant(@RequestBody PostPlantsDto postPlantsDto){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","plants/insertPlant");
+        }
+        return plantsService.insertPlant(postPlantsDto,"plants/insertPlant");
+    }
+    /**
+     * <p>修改植物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    @ApiOperation(value = "修改植物")
+    @PutMapping("/putPlantById")
+    public Result putPlantById(@RequestBody PostPlantsDto postPlantsDto,@RequestParam String plantId){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","plants/insertPlant");
+        }
+        return plantsService.putPlantById(postPlantsDto,plantId,"plants/putPlantById");
+    }
+    /**
+     * <p>删除植物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    @ApiOperation(value = "删除植物")
+    @DeleteMapping("deletePlantById")
+    public Result deletePlantById(@RequestParam String plantId){
+        if (!StpUtil.hasRole("管理员")){
+            return new Result().result403("无权限访问","plants/deletePlantById");
+        }
+        return plantsService.deletePlantById(plantId,"plants/deletePlantById");
     }
 
 }

@@ -2,6 +2,7 @@ package hzpt.plants.directory.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.dto.PostAnimalsDto;
 import hzpt.plants.directory.entity.po.Animals;
 import hzpt.plants.directory.entity.vo.GetAnimalsVo;
 
@@ -43,4 +44,22 @@ public interface AnimalsService extends IService<Animals> {
      * @since 2021/6/9
      */
     Result searchAnimals(String path);
+    /**
+     * <p>添加动物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    Result insertPlant(PostAnimalsDto postAnimalsDto, String path);
+    /**
+     * <p>修改动物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    Result putAnimal(String animalId, PostAnimalsDto postAnimalsDto, String path);
+    /**
+     * <p>删除动物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    Result deleteAnimalById(String animalId, String path);
 }

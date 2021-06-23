@@ -9,7 +9,7 @@
         FROM tbl_user AS user
                  LEFT JOIN tbl_user_permission AS userPermission ON user.openId = userPermission.openId
                  LEFT JOIN tbl_permission AS permission ON permission.id = userPermission.permissionId
-        WHERE user.nickName = #{name}
+        WHERE user.nickName = #{nickName}
     </select>
 
     <select id="getAllUserInfo" resultType="hzpt.plants.directory.entity.vo.GetUserInfoVo">
@@ -24,6 +24,15 @@
             tbl_user AS user
 			LEFT JOIN tbl_user_permission AS userPermission ON user.openId = userPermission.openId
             LEFT JOIN tbl_permission AS permission ON permission.id = userPermission.permissionId
+    </select>
+
+    <select id="getUserRole" resultType="string">
+        SELECT
+            permission.permissionName
+        FROM tbl_user AS user
+                 LEFT JOIN tbl_user_permission AS userPermission ON user.openId = userPermission.openId
+            LEFT JOIN tbl_permission AS permission ON permission.id = userPermission.permissionId
+        WHERE user.nickName = #{nickName}
     </select>
 
 

@@ -6,13 +6,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiaoTools.core.result.Result;
-import hzpt.plants.directory.entity.po.Animals;
-import hzpt.plants.directory.entity.po.Plants;
+import hzpt.plants.directory.entity.dto.PostPlantsDto;
+import hzpt.plants.directory.entity.po.*;
 import hzpt.plants.directory.entity.vo.GetAnimalsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
-import hzpt.plants.directory.mapper.AnimalsMapper;
-import hzpt.plants.directory.mapper.PlantsMapper;
+import hzpt.plants.directory.mapper.*;
 import hzpt.plants.directory.service.PlantsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import hzpt.plants.directory.utils.BeansUtils;
@@ -36,28 +35,12 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
     private PlantsMapper plantsMapper;
     @Resource
     private AnimalsMapper animalsMapper;
-    /**
-     * <p>添加植物</p>
-     * @author tfj
-     * @since 2021/6/7
-     */
-    @Override
-    public Result insertPlant(String plantName, String alias, String imagesUrl, String description, String speciesId, String address, String path) {
-       Plants plants=new Plants();
-       plants.setId(IdUtil.simpleUUID());
-       plants.setPlantName(plantName);
-       plants.setAlias(alias);
-       plants.setImagesUrl(imagesUrl);
-       plants.setDescription(description);
-       plants.setSpeciesId(speciesId);
-       plants.setAddress(address);
-       plants.setCreateTime(new Date());
-       if (plantsMapper.insert(plants)==1){
-           return new Result().result200("添加成功",path);
-       }
-        return new Result().result200("添加失败",path);
-    }
-
+    @Resource
+    private BranchMapper branchMapper;
+    @Resource
+    private GenusMapper genusMapper;
+    @Resource
+    private SpeciesMapper speciesMapper;
     /**
      * <p>查询所有植物</p>
      * @author tfj
@@ -127,5 +110,112 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
             return new Result().result200(plantsAllInfoVo,path);
         }
         return new Result().result200(animalsAllInfoVo,path);
+    }
+    /**
+     * <p>添加植物</p>
+     * @author tfj
+     * @since 2021/6/22
+     */
+    @Override
+    public Result insertPlant(PostPlantsDto postPlantsDto, String path) {
+        Branch branch = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", postPlantsDto.getBranch()));
+        if (branch==null){
+            Branch newBranch = new Branch();
+            newBranch.setId(IdUtil.simpleUUID());
+            newBranch.setCreateTime(new Date());
+            newBranch.setType(0);
+            newBranch.setBranch(postPlantsDto.getBranch());
+            branchMapper.insert(newBranch);
+        }else {
+            String branchId = branch.getId();
+            Genus genus = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", postPlantsDto.getGenus()));
+            if (genus==null){
+                Genus newGenus=new Genus();
+                newGenus.setId(IdUtil.simpleUUID());
+                newGenus.setGenus(postPlantsDto.getGenus());
+                newGenus.setBranchId(branchId);
+                newGenus.setCreateTime(new Date());
+                genusMapper.insert(newGenus);
+            }else {
+                String genusId = genus.getId();
+                Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", postPlantsDto.getSpecies()));
+                if (species==null){
+                    Species newSpecies=new Species();
+                    newSpecies.setId(IdUtil.simpleUUID());
+                    newSpecies.setSpecies(postPlantsDto.getSpecies());
+                    newSpecies.setGenusId(genusId);
+                    newSpecies.setCreateTime(new Date());
+                    speciesMapper.insert(newSpecies);
+                }else {
+                    String speciesId = species.getId();
+                    Plants plants = plantsMapper.selectOne(new QueryWrapper<Plants>().eq("plantName", postPlantsDto.getPlantName()));
+                    if (plants==null){
+                        Plants newPlant=new Plants();
+                        newPlant.setId(IdUtil.simpleUUID());
+                        newPlant.setPlantName(postPlantsDto.getPlantName());
+                        newPlant.setAlias(postPlantsDto.getAlias());
+                        newPlant.setDescription(postPlantsDto.getDescription());
+                        newPlant.setRemarks(postPlantsDto.getRemarks());
+                        newPlant.setCreateTime(new Date());
+                        newPlant.setImagesUrl(postPlantsDto.getImagesUrl());
+                        newPlant.setSpeciesId(speciesId);
+                        plantsMapper.insert(newPlant);
+                        return new Result().result200("添加植物成功",path);
+                    }else {
+                        return new Result().result500("该植物已存在，请选择修改植物",path);
+                    }
+                }
+            }
+        }
+        return new Result().result500("添加失败",path);
+    }
+    /**
+     * <p>修改植物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    @Override
+    public Result putPlantById(PostPlantsDto postPlantsDto, String plantId, String path) {
+
+        Branch branch = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", postPlantsDto.getBranch()));
+        branch.setBranch(postPlantsDto.getBranch());
+        branchMapper.updateById(branch);
+        String branchId = branch.getId();
+
+        Genus genus = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", postPlantsDto.getGenus()));
+        genus.setGenus(postPlantsDto.getGenus());
+        genus.setBranchId(branchId);
+        genus.setModifyTime(new Date());
+        genusMapper.updateById(genus);
+        String genusId = genus.getId();
+
+        Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", postPlantsDto.getSpecies()));
+        species.setGenusId(genusId);
+        species.setModifyTime(new Date());
+        speciesMapper.updateById(species);
+        String speciesId = species.getId();
+
+        Plants plants = plantsMapper.selectOne(new QueryWrapper<Plants>().eq("id", plantId));
+        plants.setAddress(postPlantsDto.getAddress());
+        plants.setDescription(postPlantsDto.getDescription());
+        plants.setRemarks(postPlantsDto.getRemarks());
+        plants.setSpeciesId(speciesId);
+        plants.setAlias(postPlantsDto.getAlias());
+        plants.setModifyTime(new Date());
+
+        plantsMapper.updateById(plants);
+        return new Result().result200("修改成功",path);
+    }
+    /**
+     * <p>删除植物</p>
+     * @author tfj
+     * @since 2021/6/23
+     */
+    @Override
+    public Result deletePlantById(String plantId, String path) {
+        if (plantsMapper.deleteById(plantId)==1){
+            return new Result().result200("删除植物成功",path);
+        }
+        return new Result().result500("删除失败",path);
     }
 }
