@@ -3,13 +3,11 @@ package hzpt.plants.directory;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import hzpt.plants.directory.entity.po.Branch;
-import hzpt.plants.directory.entity.po.Genus;
-import hzpt.plants.directory.entity.po.Plants;
-import hzpt.plants.directory.entity.po.Species;
+import hzpt.plants.directory.entity.po.*;
 import hzpt.plants.directory.entity.vo.GetMessagesVo;
 import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
+import hzpt.plants.directory.entity.vo.GetUserInfoVo;
 import hzpt.plants.directory.mapper.*;
 import hzpt.plants.directory.service.*;
 import hzpt.plants.directory.utils.BeansUtils;
@@ -19,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.RedisClientInfo;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -184,4 +183,9 @@ class HzptPlantsDirectoryApplicationTests {
         System.out.println(permission);
     }
 
+    @Test
+    public void getUserByOpenId(){
+        GetUserInfoVo user = userMapper.getAllUserInfoByOpenId("o38rx4moWnwXVQMjhLpYXNpNsXVo");
+        System.out.println(user);
+    }
 }

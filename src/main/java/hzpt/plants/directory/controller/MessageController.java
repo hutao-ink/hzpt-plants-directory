@@ -14,6 +14,7 @@ import javax.annotation.Resource;
  * @since 2021/6/12
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/message")
 public class MessageController {
     @Resource
@@ -25,8 +26,8 @@ public class MessageController {
      */
     @ApiOperation(value = "展示所有用户留言")
     @GetMapping("/getAllMessages")
-    public Result getAllMessages(){
-        return messageService.getAllMessages("/message/getAllMessages");
+    public Result getAllMessages(@RequestParam Integer currentPage){
+        return messageService.getAllMessages(currentPage,"/message/getAllMessages");
     }
 
     /**
@@ -41,5 +42,16 @@ public class MessageController {
             return new Result().result403("无权限访问","message/deleteUserMessages");
         }
         return messageService.deleteUserMessages(messageId,"message/deleteUserMessages");
+    }
+    /**
+     * <p>留言总数</p>
+     * @author tfj
+     * @since 2021/6/24
+     */
+    @ApiOperation(value = "留言总数")
+    @GetMapping("/messagesCount")
+    public Result messagesCount(){
+        int count = messageService.count();
+        return new Result().result200(count,"/message/messagesCount");
     }
 }

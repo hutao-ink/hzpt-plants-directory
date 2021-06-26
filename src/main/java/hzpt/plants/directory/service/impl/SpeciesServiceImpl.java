@@ -5,9 +5,12 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.config.OssConfig;
 import hzpt.plants.directory.entity.dto.PostSpeciesDto;
+import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.entity.po.Species;
 import hzpt.plants.directory.mapper.SpeciesMapper;
 import hzpt.plants.directory.service.SpeciesService;
@@ -58,8 +61,9 @@ public class SpeciesServiceImpl extends ServiceImpl<SpeciesMapper, Species> impl
      * @since 2021/6/7
      */
     @Override
-    public Result searchSpecies(String path) {
-        List<Species> speciesList = speciesMapper.selectList(new QueryWrapper<>());
+    public Result searchSpecies(Integer currentPage,String path) {
+        Page<Species> page=new Page<>(currentPage,21);
+        IPage<Species> speciesList=speciesMapper.selectPage(page,null);
         return new Result().result200(speciesList,path);
     }
     /**

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * <p></p>
  * @author tfj
@@ -12,7 +14,6 @@ import lombok.Data;
 @Data
 public class GetUserInfoVo {
 
-
     @TableField("openId")
     private String openId;
 
@@ -20,13 +21,14 @@ public class GetUserInfoVo {
     @TableField("nickName")
     private String nickName;
 
+    @ApiModelProperty(value = "城市")
+    @TableField("city")
+    private String city;
+
     @ApiModelProperty(value = "头像地址")
     @TableField("imageUrl")
     private String imageUrl;
 
-    @ApiModelProperty(value = "城市")
-    @TableField("city")
-    private String city;
 
     @ApiModelProperty("权限名")
     @TableField("permissionName")

@@ -16,6 +16,7 @@ import javax.annotation.Resource;
  * @since 2021/6/7 16
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/animals")
 public class AnimalsController {
     @Resource
@@ -59,8 +60,8 @@ public class AnimalsController {
      */
     @ApiOperation(value = "查询所有动物")
     @GetMapping("/searchAnimals")
-    public Result searchAnimals(){
-        return animalsService.searchAnimals("/animals/searchAnimals");
+    public Result searchAnimals(@RequestParam Integer currentPage){
+        return animalsService.searchAnimals(currentPage,"/animals/searchAnimals");
     }
     /**
      * <p>获取动物总数</p>

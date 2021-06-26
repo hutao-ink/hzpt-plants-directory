@@ -59,4 +59,5 @@ public class User implements Serializable {
 
     @TableField("modifyTime")
     private Date modifyTime;
+
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("tbl_animals")
-@ApiModel(value="Plants对象", description="")
+@ApiModel(value="animals", description="")
 public class Animals {
     private String id ;
 

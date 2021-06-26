@@ -20,6 +20,7 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/species")
 public class SpeciesController {
     @Resource
@@ -43,8 +44,8 @@ public class SpeciesController {
      */
     @ApiOperation(value = "查询所有种类")
     @GetMapping("/searchSpecies")
-    public Result searchSpecies(){
-        return speciesService.searchSpecies("/branch/searchSpecies");
+    public Result searchSpecies(@RequestParam Integer currentPage){
+        return speciesService.searchSpecies(currentPage,"/branch/searchSpecies");
     }
     /**
      * <p>通过属类id查找所有种类</p>

@@ -15,7 +15,7 @@ public interface MessageService extends IService<Message> {
      * @author tfj
      * @since 2021/6/12
      */
-    Result getAllMessages(String path);
+    Result getAllMessages(Integer currentPage,String path);
     /**
      * <p>删除用户留言</p>
      * @author tfj

@@ -18,6 +18,7 @@ import javax.annotation.Resource;
  * @since 2021-06-08
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/carousel")
 public class CarouselController {
     @Resource

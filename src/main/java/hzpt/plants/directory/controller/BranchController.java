@@ -20,6 +20,7 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/branch")
 public class BranchController {
     @Resource
@@ -44,8 +45,8 @@ public class BranchController {
      */
     @ApiOperation(value = "查询所有科目")
     @GetMapping("/searchBranch")
-    public Result searchBranch(){
-        return branchService.searchBranch("/branch/searchBranch");
+    public Result searchBranch(@RequestParam Integer currentPage){
+        return branchService.searchBranch(currentPage,"/branch/searchBranch");
     }
 
      /**

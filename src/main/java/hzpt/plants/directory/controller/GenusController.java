@@ -19,6 +19,7 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/genus")
 public class GenusController {
     @Resource
@@ -43,8 +44,8 @@ public class GenusController {
      */
     @ApiOperation(value = "查询所有属目")
     @GetMapping("/searchGenus")
-    public Result searchGenus(){
-        return genusService.searchGenus("/genus/searchGenus");
+    public Result searchGenus(@RequestParam Integer currentPage){
+        return genusService.searchGenus(currentPage,"/genus/searchGenus");
     }
     /**
      * <p>通过科类id查找所有属类</p>

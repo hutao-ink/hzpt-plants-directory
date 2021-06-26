@@ -2,8 +2,11 @@ package hzpt.plants.directory.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostGenusDto;
+import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.entity.po.Genus;
 import hzpt.plants.directory.mapper.GenusMapper;
 import hzpt.plants.directory.service.GenusService;
@@ -50,9 +53,10 @@ public class GenusServiceImpl extends ServiceImpl<GenusMapper, Genus> implements
      * @since 2021/6/7
      */
     @Override
-    public Result searchGenus(String path) {
-        List<Genus> genusList = genusMapper.selectList(new QueryWrapper<>());
-        return new Result().result200(genusList,path);
+    public Result searchGenus(Integer currentPage,String path) {
+        Page<Genus> page=new Page<>(currentPage,21);
+        IPage<Genus> genusPage=genusMapper.selectPage(page,null);
+        return new Result().result200(genusPage,path);
     }
     /**
      * <p>通过科类id查找所有属类</p>

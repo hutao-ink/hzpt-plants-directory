@@ -98,8 +98,9 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
      * @since 2021/6/9
      */
     @Override
-    public Result searchAnimals(String path) {
-        List<Animals> animalsList = animalsMapper.selectList(new QueryWrapper<>());
+    public Result searchAnimals(Integer currentPage,String path) {
+        Page<Animals> page=new Page<>(currentPage,21);
+        IPage<Animals> animalsList=animalsMapper.selectPage(page,null);
         return new Result().result200(animalsList,path);
     }
     /**
@@ -192,7 +193,6 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
         animals.setSpeciesId(speciesId);
         animals.setAlias(postAnimalsDto.getAlias());
         animals.setModifyTime(new Date());
-
         animalsMapper.updateById(animals);
         return new Result().result200("修改成功",path);
     }
@@ -209,3 +209,4 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
         return new Result().result500("删除失败",path);
     }
 }
+

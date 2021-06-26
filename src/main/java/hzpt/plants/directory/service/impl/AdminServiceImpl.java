@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("nickName",nickName));
         Cipher userCipher = cipherMapper.selectOne(new QueryWrapper<Cipher>().eq("openId", user.getOpenId()));
         if (user.getOpenId().equals(userCipher.getOpenId())&&userCipher.getCipher().equals(cipher)){
-            //redisTemplate.opsForValue().set(user.getOpenId(),user,7, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set(user.getNickName(),user.getNickName(),7, TimeUnit.DAYS);
             StpUtil.setLoginId(user.getNickName());
             Map<String, Object> map=new HashMap<>(1);
             map.put("info","登录成功");

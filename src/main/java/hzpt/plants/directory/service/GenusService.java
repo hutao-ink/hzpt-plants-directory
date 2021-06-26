@@ -26,7 +26,7 @@ public interface GenusService extends IService<Genus> {
      * @author tfj
      * @since 2021/6/7
      */
-    Result searchGenus(String path);
+    Result searchGenus(Integer currentPage,String path);
     /**
      * <p>通过科类id查找所有属类</p>
      * @author tfj

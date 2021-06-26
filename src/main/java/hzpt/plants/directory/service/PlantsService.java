@@ -5,6 +5,7 @@ import hzpt.plants.directory.entity.dto.PostPlantsDto;
 import hzpt.plants.directory.entity.po.Plants;
 import com.baomidou.mybatisplus.extension.service.IService;
 import hzpt.plants.directory.entity.vo.GetPlantsVo;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface PlantsService extends IService<Plants> {
      * @author tfj
      * @since 2021/6/7
      */
-    Result searchPlants(String path);
+    Result searchPlants(Integer currentPage,String path);
     /**
      * <p>通过种类id查找所有植物</p>
      * @author tfj

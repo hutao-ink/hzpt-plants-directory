@@ -26,7 +26,7 @@ public interface SpeciesService extends IService<Species> {
      * @author tfj
      * @since 2021/6/7
      */
-    Result searchSpecies(String path);
+    Result searchSpecies(Integer currentPage,String path);
     /**
      * <p>通过属类id查找所有种类</p>
      * @author tfj

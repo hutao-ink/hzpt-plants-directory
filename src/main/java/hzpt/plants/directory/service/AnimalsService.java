@@ -43,7 +43,7 @@ public interface AnimalsService extends IService<Animals> {
      * @author tfj
      * @since 2021/6/9
      */
-    Result searchAnimals(String path);
+    Result searchAnimals(Integer currentPage,String path);
     /**
      * <p>添加动物</p>
      * @author tfj

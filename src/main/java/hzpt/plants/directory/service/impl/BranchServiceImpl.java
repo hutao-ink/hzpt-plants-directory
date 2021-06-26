@@ -5,9 +5,12 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.config.OssConfig;
 import hzpt.plants.directory.entity.dto.PostBranchDto;
+import hzpt.plants.directory.entity.po.Animals;
 import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.mapper.BranchMapper;
 import hzpt.plants.directory.service.BranchService;
@@ -61,8 +64,9 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
      * @since 2021/6/7
      */
     @Override
-    public Result searchBranch(String path) {
-        List<Branch> branchList = branchMapper.selectList(new QueryWrapper<Branch>().orderByDesc("createTime"));
+    public Result searchBranch(Integer currentPage,String path) {
+        Page<Branch> page=new Page<>(currentPage,21);
+        IPage<Branch> branchList=branchMapper.selectPage(page,null);
         return new Result().result200(branchList,path);
     }
 

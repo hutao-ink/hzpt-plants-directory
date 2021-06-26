@@ -18,6 +18,7 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/plants")
 public class PlantsController {
     @Resource
@@ -43,8 +44,8 @@ public class PlantsController {
      */
     @ApiOperation(value = "查询所有植物")
     @GetMapping("/searchPlants")
-    public Result searchPlants(){
-        return plantsService.searchPlants("/plants/searchPlants");
+    public Result searchPlants(@RequestParam Integer currentPage){
+        return plantsService.searchPlants(currentPage,"/plants/searchPlants");
     }
 
     /**

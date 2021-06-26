@@ -47,8 +47,9 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
      * @since 2021/6/7
      */
     @Override
-    public Result searchPlants(String path) {
-        List<Plants> plantsList = plantsMapper.selectList(new QueryWrapper<>());
+    public Result searchPlants(Integer currentPage,String path) {
+        Page<Plants> page=new Page<>(currentPage,21);
+        IPage<Plants> plantsList=plantsMapper.selectPage(page,null);
         return new Result().result200(plantsList,path);
     }
     /**

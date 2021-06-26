@@ -12,8 +12,9 @@ public interface UserMapper extends BaseMapper<User>{
 
     String getPermissionByNickName(String nickName);
 
-
     List<GetUserInfoVo> getAllUserInfo();
 
     String getUserRole(String nickName);
+
+    GetUserInfoVo getAllUserInfoByOpenId(String openId);
 }

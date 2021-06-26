@@ -1,8 +1,11 @@
 package hzpt.plants.directory.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xiaoTools.core.result.Result;
+import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.entity.po.Message;
 import hzpt.plants.directory.mapper.MessageMapper;
 import hzpt.plants.directory.service.MessageService;
@@ -26,8 +29,9 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
      * @since 2021/6/12
      */
     @Override
-    public Result getAllMessages(String path) {
-        List<Message> messages = messageMapper.selectList(new QueryWrapper<>());
+    public Result getAllMessages(Integer currentPage,String path) {
+        Page<Message> page=new Page<>(currentPage,21);
+        IPage<Message> messages=messageMapper.selectPage(page,null);
         return new Result().result200(messages,path);
     }
     /**
