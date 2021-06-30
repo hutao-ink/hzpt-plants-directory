@@ -20,7 +20,7 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/branch")
 public class BranchController {
     @Resource

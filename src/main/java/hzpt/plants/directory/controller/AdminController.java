@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @since 2021/6/21
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/admin")
 public class AdminController {
 
@@ -32,7 +32,7 @@ public class AdminController {
     @ApiOperation(value = "管理员登录")
     @GetMapping("/login")
     public Result login(@RequestParam String nickName,String cipher){
-       return adminService.login(nickName,cipher,"admin/login");
+       return adminService.login(nickName,cipher,"/admin/login");
     }
 
     /**

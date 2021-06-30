@@ -9,5 +9,4 @@ import hzpt.plants.directory.entity.po.Permission;
  * @since 2021/6/21
  */
 public interface PermissionMapper extends BaseMapper<Permission> {
-    void addUserPermission(String openId, String name);
 }

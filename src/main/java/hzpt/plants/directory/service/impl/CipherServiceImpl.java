@@ -1,22 +1,16 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.codec.Base64Encoder;
-import cn.hutool.core.util.IdUtil;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Cipher;
 import hzpt.plants.directory.mapper.CipherMapper;
 import hzpt.plants.directory.service.CipherService;
-import org.apache.commons.codec.cli.Digest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
-import java.beans.Encoder;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**

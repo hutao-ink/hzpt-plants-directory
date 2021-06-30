@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/genus")
 public class GenusController {
     @Resource

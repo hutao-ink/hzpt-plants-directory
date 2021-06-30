@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021/6/21
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/userPermission")
 public class UserPermissionController {
 }

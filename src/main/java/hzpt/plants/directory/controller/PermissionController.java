@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @since 2021/6/21
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/permission")
 public class PermissionController {
 

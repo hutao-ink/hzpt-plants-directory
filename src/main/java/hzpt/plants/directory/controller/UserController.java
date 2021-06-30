@@ -19,7 +19,7 @@ import javax.annotation.Resource;
  * @since 2021/6/7
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/user")
 public class UserController {
 

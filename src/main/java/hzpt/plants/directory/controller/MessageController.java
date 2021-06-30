@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @since 2021/6/12
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/message")
 public class MessageController {
     @Resource

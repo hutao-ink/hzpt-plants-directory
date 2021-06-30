@@ -1,16 +1,12 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.util.IdUtil;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.config.OssConfig;
 import hzpt.plants.directory.entity.dto.PostSpeciesDto;
-import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.entity.po.Species;
 import hzpt.plants.directory.mapper.SpeciesMapper;
 import hzpt.plants.directory.service.SpeciesService;
@@ -19,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -84,25 +78,11 @@ public class SpeciesServiceImpl extends ServiceImpl<SpeciesMapper, Species> impl
      */
     @Override
     public Result insertImageById(String speciesId, MultipartFile file, String path) {
-        OSS ossClient = new OSSClientBuilder().build(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());
-        if (file != null) {
-
-            String originalFilename = file.getOriginalFilename();
-
-            PutObjectRequest putObjectRequest = null;
-            try {
-                putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(file.getBytes()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ossClient.putObject(putObjectRequest);
-            ossClient.shutdown();
-
-            String imagesUrl = ossConfig.getDomain() + originalFilename;
-            Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("id", speciesId));
-            species.setImagesUrl(imagesUrl);
-            species.setModifyTime(new Date());
-            speciesMapper.updateById(species);
+        String uploadImage = ossConfig.uploadImage(file);
+        Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("id", speciesId));
+        species.setImagesUrl(uploadImage);
+        species.setModifyTime(new Date());
+        if (speciesMapper.updateById(species)==1){;
             return new Result().result200("修改属类图片成功",path);
         }
         return new Result().result500("修改属类图片失败",path);

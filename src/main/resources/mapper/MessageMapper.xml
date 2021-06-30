@@ -21,14 +21,17 @@
 
     <select id="getAllMessage" resultType="hzpt.plants.directory.entity.vo.GetMessagesVo">
         SELECT
-            message.id AS id,
-            message.openId AS openId,
-            message.userMessage AS userMessage,
-            message.imagesUrl AS imagesUrl,
-            message.createTime AS createTime,
-            (SELECT user.nickName from tbl_user AS user where message.openId=user.openId) as nickName,
-            (SELECT user.imageUrl from tbl_user AS user where message.openId=user.openId) as imageUrl
+        message.id AS id,
+        message.openId AS openId,
+        message.userMessage AS userMessage,
+        message.imagesUrl AS imagesUrl,
+        message.createTime AS createTime,
+        message.deleted AS deleted,
+        (SELECT user.nickName from tbl_user AS user where message.openId=user.openId) as nickName,
+        (SELECT user.imageUrl from tbl_user AS user where message.openId=user.openId) as imageUrl
         FROM
-            tbl_message AS message order By createTime='2021-06-17 15:51:48' DESC,createTime DESC;
+        tbl_message AS message
+        WHERE deleted=#{deleted}
+        order By createTime='2021-06-17 15:51:48' DESC,createTime DESC;
     </select>
 </mapper>

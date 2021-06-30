@@ -18,12 +18,11 @@ import javax.annotation.Resource;
  * @since 2021-06-08
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/carousel")
 public class CarouselController {
     @Resource
     private CarouselService carouselService;
-
     /**
      * <p>获取所有轮播图</p>
      * @author tfj

@@ -2,6 +2,7 @@ package hzpt.plants.directory.entity.po;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class Plants implements Serializable {
     private String remarks;
 
     @ApiModelProperty(value = "逻辑删除，1删除，0没删除")
+    @TableLogic
     private Integer deleted;
 
     @ApiModelProperty(value = "创建时间")
