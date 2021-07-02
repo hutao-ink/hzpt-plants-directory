@@ -3,6 +3,8 @@
 **联系人**: 489516067@qq.com
 
 **服务Url**: https://hutao.ink/a/directory
+小程序二维码（简版）
+![](https://img-youpai.weixiaoi.com/tu/2021/0702/1625234299210702.jpg)
 
 ---
 
