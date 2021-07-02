@@ -28,6 +28,7 @@
 |   remarks   | varchar(50)  |          |    备注    |
 |   deleted   |   tinyint    |          |  逻辑删除  |
 | createTime  |   datetime   |          |  创建时间  |
+| modifyTime  |   datetime   |          |  修改时间  |
 
 
 
@@ -45,6 +46,7 @@
 |   remarks   | varchar(50)  |          |    备注    |
 |   deleted   |   tinyint    |          |  逻辑删除  |
 | createTime  |   datetime   |          |  创建时间  |
+| modifyTime  |   datetime   |          |  修改时间  |
 
 ### 3.科目表(tbl_branch)
 
@@ -55,6 +57,7 @@
 | imagesUrl  | varchar(255) |          |  图片地址  |
 |    type    |   tinyint    |          |  科目类型  |
 | createTime |   datetime   |          |  创建时间  |
+| modifyTime |   datetime   |          |  修改时间  |
 
 ### 4.属目表(tbl_genus)
 
@@ -64,6 +67,7 @@
 |   genus    | varchar(50) |          |    属目    |
 |  branchId  | varchar(50) |          |   科目id   |
 | createTime |  datetime   |          |  创建时间  |
+| modifyTime |  datetime   |          |  修改时间  |
 
 ### 5.种类表(tbl_species)
 
@@ -74,6 +78,7 @@
 | imagesUrl  | varchar(255) |          |  图片地址  |
 |  genusId   | varchar(50)  |          |   属类id   |
 | createTime |   datetime   |          |  创建时间  |
+| modifyTime |   datetime   |          |  修改时间  |
 
 ### 6.用户表(tbl_user)
 
@@ -88,6 +93,7 @@
 |  country   | varchar(50)  |          |     国家     |
 |   gender   |  tinyint(1)  |          |     性别     |
 | createTime |   datetime   |          |   创建时间   |
+| modifyTime |   datetime   |          |   修改时间   |
 
 -- ----------------------------
 
@@ -100,6 +106,7 @@
 |  imagesUrl  | varchar(255) |          | 留言图片地址 |
 | userMessage | varchar(50)  |          |   留言信息   |
 | createTime  |   datetime   |          |   创建时间   |
+| modifyTime  |   datetime   |          |   修改时间   |
 
 ### 8.轮播图表(tbl_carousel)
 
@@ -110,8 +117,301 @@
 | biologicalName | varchar(50) |          |  生物名称  |
 |  biologicalId  | varchar(50) |          |   生物id   |
 |   createTime   |  datetime   |          |  创建时间  |
+|   modifyTime   |  datetime   |          |  修改时间  |
+
+### 9.密码表（tbl_cipher）
+
+| 字段名     | 类型         | 是否为空 | 备注       |
+| :--------- | ------------ | -------- | ---------- |
+| id         | varchar(50)  | NOT NULL | 序号(UUID) |
+| openId     | varchar(50)  |          | 用户凭证   |
+| cipher     | varchar(255) |          | 密码       |
+| createTime | datetime     |          | 创建时间   |
+| modifyTime | datetime     |          | 修改时间   |
+
+### 10.权限表（tbl_permission）
+
+| 字段名         | 类型        | 是否为空 | 备注       |
+| -------------- | ----------- | -------- | ---------- |
+| id             | varchar(50) | NOT NULL | 序号(UUID) |
+| permissionName | varchar(50) |          | 权限名     |
+| createTime     | datetime    |          | 创建时间   |
+| modifyTime     | datetime    |          | 修改时间   |
+
+### 11.用户权限表（tbl_user_permission）
+
+| 字段名       | 类型        | 是否为空 | 备注       |
+| ------------ | ----------- | -------- | ---------- |
+| id           | varchar(50) | NOT NULL | 序号(UUID) |
+| openId       | varchar(50) |          | 用户凭证   |
+| permissionId | varchar(50) |          | 权限名id   |
+| createTime   | datetime    |          | 创建时间   |
+| modifyTime   | datetime    |          | 修改时间   |
 
 ## 接口文档
+
+
+### admin-controller
+
+
+#### 获取所有用户信息
+
+
+**接口地址**:`/directory/admin/getALlUserIndo`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+暂无
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{
+	"details": "",
+	"info": "",
+	"message": {},
+	"path": "",
+	"status": 0,
+	"timestamp": ""
+}
+```
+
+
+#### 管理员登录
+
+
+**接口地址**:`/directory/admin/login`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| nickName | nickName | query    | true     | string   |        |
+| cipher   | cipher   | query    | false    | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{
+	"details": "",
+	"info": "",
+	"message": {},
+	"path": "",
+	"status": 0,
+	"timestamp": ""
+}
+```
+
+
+#### 管理员修改密码
+
+
+**接口地址**:`/directory/admin/putCipher`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称  | 参数说明  | 请求类型 | 是否必须 | 数据类型 | schema |
+| --------- | --------- | -------- | -------- | -------- | ------ |
+| cipher    | cipher    | query    | true     | string   |        |
+| oldCipher | oldCipher | query    | true     | string   |        |
+| openId    | openId    | query    | false    | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{
+	"details": "",
+	"info": "",
+	"message": {},
+	"path": "",
+	"status": 0,
+	"timestamp": ""
+}
+```
+
+
+#### 修改用户权限
+
+
+**接口地址**:`/directory/admin/updateUserPermission`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称       | 参数说明       | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------------- | -------------- | -------- | -------- | -------- | ------ |
+| openId         | openId         | query    | true     | string   |        |
+| permissionName | permissionName | query    | false    | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{
+	"details": "",
+	"info": "",
+	"message": {},
+	"path": "",
+	"status": 0,
+	"timestamp": ""
+}
+```
 
 
 ### animals-controller
@@ -150,6 +450,70 @@
 | 401    | Unauthorized |        |
 | 403    | Forbidden    |        |
 | 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{
+	"details": "",
+	"info": "",
+	"message": {},
+	"path": "",
+	"status": 0,
+	"timestamp": ""
+}
+```
+
+
+#### 删除动物
+
+
+**接口地址**:`/directory/animals/deleteAnimalById`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| animalId | animalId | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 204    | No Content   |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
 
 
 **响应参数**:
@@ -243,6 +607,173 @@
 ```
 
 
+#### 添加动物
+
+
+**接口地址**:`/directory/animals/insertAnimal`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求示例**:
+
+
+```javascript
+{
+  "address": "",
+  "alias": "",
+  "animalName": "",
+  "branch": "",
+  "description": "",
+  "genus": "",
+  "id": "",
+  "imagesUrl": "",
+  "modifyTime": "",
+  "remarks": "",
+  "species": ""
+}
+```
+
+
+**请求参数**:
+
+
+| 参数名称                | 参数说明       | 请求类型 | 是否必须 | 数据类型          | schema         |
+| ----------------------- | -------------- | -------- | -------- | ----------------- | -------------- |
+| postAnimalsDto          | postAnimalsDto | body     | true     | PostAnimalsDto    | PostAnimalsDto |
+| &emsp;&emsp;address     | 分布区域       |          | false    | string            |                |
+| &emsp;&emsp;alias       | 别名           |          | false    | string            |                |
+| &emsp;&emsp;animalName  | 动物名称       |          | false    | string            |                |
+| &emsp;&emsp;branch      | 科             |          | false    | string            |                |
+| &emsp;&emsp;description | 描述信息       |          | false    | string            |                |
+| &emsp;&emsp;genus       | 属             |          | false    | string            |                |
+| &emsp;&emsp;id          |                |          | false    | string            |                |
+| &emsp;&emsp;imagesUrl   | 图片地址       |          | false    | string            |                |
+| &emsp;&emsp;modifyTime  |                |          | false    | string(date-time) |                |
+| &emsp;&emsp;remarks     | 备注           |          | false    | string            |                |
+| &emsp;&emsp;species     | 种             |          | false    | string            |                |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 修改动物
+
+
+**接口地址**:`/directory/animals/putAnimal`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求示例**:
+
+
+```javascript
+{  "address": "",  "alias": "",  "animalName": "",  "branch": "",  "description": "",  "genus": "",  "id": "",  "imagesUrl": "",  "modifyTime": "",  "remarks": "",  "species": ""}
+```
+
+
+**请求参数**:
+
+
+| 参数名称                | 参数说明       | 请求类型 | 是否必须 | 数据类型          | schema         |
+| ----------------------- | -------------- | -------- | -------- | ----------------- | -------------- |
+| animalId                | animalId       | query    | true     | string            |                |
+| postAnimalsDto          | postAnimalsDto | body     | true     | PostAnimalsDto    | PostAnimalsDto |
+| &emsp;&emsp;address     | 分布区域       |          | false    | string            |                |
+| &emsp;&emsp;alias       | 别名           |          | false    | string            |                |
+| &emsp;&emsp;animalName  | 动物名称       |          | false    | string            |                |
+| &emsp;&emsp;branch      | 科             |          | false    | string            |                |
+| &emsp;&emsp;description | 描述信息       |          | false    | string            |                |
+| &emsp;&emsp;genus       | 属             |          | false    | string            |                |
+| &emsp;&emsp;id          |                |          | false    | string            |                |
+| &emsp;&emsp;imagesUrl   | 图片地址       |          | false    | string            |                |
+| &emsp;&emsp;modifyTime  |                |          | false    | string(date-time) |                |
+| &emsp;&emsp;remarks     | 备注           |          | false    | string            |                |
+| &emsp;&emsp;species     | 种             |          | false    | string            |                |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
 #### 通过动物id获取动物所有信息
 
 
@@ -296,14 +827,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -328,7 +852,9 @@
 **请求参数**:
 
 
-暂无
+| 参数名称    | 参数说明    | 请求类型 | 是否必须 | 数据类型       | schema |
+| ----------- | ----------- | -------- | -------- | -------------- | ------ |
+| currentPage | currentPage | query    | true     | integer(int32) |        |
 
 
 **响应状态**:
@@ -358,14 +884,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -422,14 +941,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -487,14 +999,64 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 删除科目
+
+
+**接口地址**:`/directory/branch/deleteBranchById`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| branchId | branchId | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 204    | No Content   |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -551,14 +1113,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -583,9 +1138,9 @@
 **请求参数**:
 
 
-| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
-| -------- | -------- | -------- | -------- | -------- | ------ |
-| branch   | branch   | query    | true     | string   |        |
+| 参数名称   | 参数说明   | 请求类型 | 是否必须 | 数据类型 | schema |
+| ---------- | ---------- | -------- | -------- | -------- | ------ |
+| branchName | branchName | query    | true     | string   |        |
 
 
 **响应状态**:
@@ -616,14 +1171,195 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 添加科目图片
+
+
+**接口地址**:`/directory/branch/insertBranchImage`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`multipart/form-data`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称   | 参数说明   | 请求类型 | 是否必须 | 数据类型 | schema |
+| ---------- | ---------- | -------- | -------- | -------- | ------ |
+| branchName | branchName | query    | true     | string   |        |
+| file       | file       | formData | true     | file     |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 修改科目信息
+
+
+**接口地址**:`/directory/branch/putBranchById`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求示例**:
+
+
+```javascript
+{  "branch": "",  "id": "",  "modifyTime": "",  "type": 0}
+```
+
+
+**请求参数**:
+
+
+| 参数名称               | 参数说明      | 请求类型 | 是否必须 | 数据类型          | schema        |
+| ---------------------- | ------------- | -------- | -------- | ----------------- | ------------- |
+| postBranchDto          | postBranchDto | body     | true     | PostBranchDto     | PostBranchDto |
+| &emsp;&emsp;branch     | 科目          |          | false    | string            |               |
+| &emsp;&emsp;id         |               |          | false    | string            |               |
+| &emsp;&emsp;modifyTime |               |          | false    | string(date-time) |               |
+| &emsp;&emsp;type       | 科目类型地址  |          | false    | integer(int32)    |               |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 修改科目图片
+
+
+**接口地址**:`/directory/branch/putBranchImage`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`multipart/form-data`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| branchId | branchId | query    | true     | string   |        |
+| file     | file     | formData | true     | file     |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -678,14 +1414,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -710,7 +1439,9 @@
 **请求参数**:
 
 
-暂无
+| 参数名称    | 参数说明    | 请求类型 | 是否必须 | 数据类型       | schema |
+| ----------- | ----------- | -------- | -------- | -------------- | ------ |
+| currentPage | currentPage | query    | true     | integer(int32) |        |
 
 
 **响应状态**:
@@ -795,18 +1526,68 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
 ### carousel-controller
+
+
+#### 删除轮播图
+
+
+**接口地址**:`/directory/carousel/deleteCarousel`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称   | 参数说明   | 请求类型 | 是否必须 | 数据类型 | schema |
+| ---------- | ---------- | -------- | -------- | -------- | ------ |
+| carouselId | carouselId | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 204    | No Content   |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
 
 
 #### 添加轮播图
@@ -818,7 +1599,7 @@
 **请求方式**:`POST`
 
 
-**请求数据类型**:`application/json`
+**请求数据类型**:`multipart/form-data`
 
 
 **响应数据类型**:`*/*`
@@ -832,9 +1613,68 @@
 
 | 参数名称       | 参数说明       | 请求类型 | 是否必须 | 数据类型 | schema |
 | -------------- | -------------- | -------- | -------- | -------- | ------ |
-| carouselUrl    | carouselUrl    | query    | true     | string   |        |
+| biologicalName | biologicalName | query    | true     | string   |        |
+| file           | file           | formData | true     | file     |        |
 | biologicalId   | biologicalId   | query    | false    | string   |        |
-| biologicalName | biologicalName | query    | false    | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 修改轮播图
+
+
+**接口地址**:`/directory/carousel/putCarousel`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`multipart/form-data`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称   | 参数说明   | 请求类型 | 是否必须 | 数据类型 | schema |
+| ---------- | ---------- | -------- | -------- | -------- | ------ |
+| carouselId | carouselId | query    | true     | string   |        |
+| file       | file       | formData | true     | file     |        |
 
 
 **响应状态**:
@@ -924,7 +1764,125 @@
 ```
 
 
+### cipher-controller
+
+
+#### 添加管理员权限密码
+
+
+**接口地址**:`/directory/cipher/insertCipher`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| openId   | openId   | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
 ### genus-controller
+
+
+#### 删除属目
+
+
+**接口地址**:`/directory/genus/deleteGenus`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| genusId  | genusId  | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 204    | No Content   |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
 
 
 #### 获取属总数
@@ -1098,6 +2056,76 @@
 ```
 
 
+#### 修改属目
+
+
+**接口地址**:`/directory/genus/putGenusById`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求示例**:
+
+
+```javascript
+{  "branchId": "",  "genus": "",  "id": "",  "modifyTime": ""}
+```
+
+
+**请求参数**:
+
+
+| 参数名称               | 参数说明     | 请求类型 | 是否必须 | 数据类型          | schema       |
+| ---------------------- | ------------ | -------- | -------- | ----------------- | ------------ |
+| postGenusDto           | postGenusDto | body     | true     | PostGenusDto      | PostGenusDto |
+| &emsp;&emsp;branchId   | 科的id       |          | false    | string            |              |
+| &emsp;&emsp;genus      | 属           |          | false    | string            |              |
+| &emsp;&emsp;id         |              |          | false    | string            |              |
+| &emsp;&emsp;modifyTime |              |          | false    | string(date-time) |              |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
 #### 查询所有属目
 
 
@@ -1119,7 +2147,9 @@
 **请求参数**:
 
 
-暂无
+| 参数名称    | 参数说明    | 请求类型 | 是否必须 | 数据类型       | schema |
+| ----------- | ----------- | -------- | -------- | -------------- | ------ |
+| currentPage | currentPage | query    | true     | integer(int32) |        |
 
 
 **响应状态**:
@@ -1206,24 +2236,131 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
 ### message-controller
 
 
+#### 删除用户留言
+
+
+**接口地址**:`/directory/message/deleteUserMessages`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称  | 参数说明  | 请求类型 | 是否必须 | 数据类型 | schema |
+| --------- | --------- | -------- | -------- | -------- | ------ |
+| messageId | messageId | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 204    | No Content   |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
 #### 展示所有用户留言
 
 
 **接口地址**:`/directory/message/getAllMessages`
+
+
+**请求方式**:`GET`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称    | 参数说明    | 请求类型 | 是否必须 | 数据类型       | schema |
+| ----------- | ----------- | -------- | -------- | -------------- | ------ |
+| currentPage | currentPage | query    | true     | integer(int32) |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 留言总数
+
+
+**接口地址**:`/directory/message/messagesCount`
 
 
 **请求方式**:`GET`
@@ -1275,7 +2412,125 @@
 ```
 
 
+### permission-controller
+
+
+#### 添加权限
+
+
+**接口地址**:`/directory/permission/addPermission`
+
+
+**请求方式**:`POST`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| name     | name     | query    | false    | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
 ### plants-controller
+
+
+#### 删除植物
+
+
+**接口地址**:`/directory/plants/deletePlantById`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
+| -------- | -------- | -------- | -------- | -------- | ------ |
+| plantId  | plantId  | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 204    | No Content   |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
 
 
 #### 分页模糊查询
@@ -1354,17 +2609,31 @@
 **接口描述**:
 
 
+**请求示例**:
+
+
+```javascript
+{  "address": "",  "alias": "",  "branch": "",  "description": "",  "genus": "",  "id": "",  "imagesUrl": "",  "modifyTime": "",  "plantName": "",  "remarks": "",  "species": ""}
+```
+
+
 **请求参数**:
 
 
-| 参数名称    | 参数说明    | 请求类型 | 是否必须 | 数据类型 | schema |
-| ----------- | ----------- | -------- | -------- | -------- | ------ |
-| plantName   | plantName   | query    | true     | string   |        |
-| address     | address     | query    | false    | string   |        |
-| alias       | alias       | query    | false    | string   |        |
-| description | description | query    | false    | string   |        |
-| imagesUrl   | imagesUrl   | query    | false    | string   |        |
-| speciesId   | speciesId   | query    | false    | string   |        |
+| 参数名称                | 参数说明      | 请求类型 | 是否必须 | 数据类型          | schema        |
+| ----------------------- | ------------- | -------- | -------- | ----------------- | ------------- |
+| postPlantsDto           | postPlantsDto | body     | true     | PostPlantsDto     | PostPlantsDto |
+| &emsp;&emsp;address     | 分布区域      |          | false    | string            |               |
+| &emsp;&emsp;alias       | 别名          |          | false    | string            |               |
+| &emsp;&emsp;branch      | 科            |          | false    | string            |               |
+| &emsp;&emsp;description | 描述信息      |          | false    | string            |               |
+| &emsp;&emsp;genus       | 属            |          | false    | string            |               |
+| &emsp;&emsp;id          |               |          | false    | string            |               |
+| &emsp;&emsp;imagesUrl   | 图片地址      |          | false    | string            |               |
+| &emsp;&emsp;modifyTime  |               |          | false    | string(date-time) |               |
+| &emsp;&emsp;plantName   | 植物名称      |          | false    | string            |               |
+| &emsp;&emsp;remarks     | 备注          |          | false    | string            |               |
+| &emsp;&emsp;species     | 种            |          | false    | string            |               |
 
 
 **响应状态**:
@@ -1429,6 +2698,84 @@
 | 状态码 | 说明         | schema |
 | ------ | ------------ | ------ |
 | 200    | OK           | Result |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+| 404    | Not Found    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
+
+
+#### 修改植物
+
+
+**接口地址**:`/directory/plants/putPlantById`
+
+
+**请求方式**:`PUT`
+
+
+**请求数据类型**:`application/json`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求示例**:
+
+
+```javascript
+{  "address": "",  "alias": "",  "branch": "",  "description": "",  "genus": "",  "id": "",  "imagesUrl": "",  "modifyTime": "",  "plantName": "",  "remarks": "",  "species": ""}
+```
+
+
+**请求参数**:
+
+
+| 参数名称                | 参数说明      | 请求类型 | 是否必须 | 数据类型          | schema        |
+| ----------------------- | ------------- | -------- | -------- | ----------------- | ------------- |
+| plantId                 | plantId       | query    | true     | string            |               |
+| postPlantsDto           | postPlantsDto | body     | true     | PostPlantsDto     | PostPlantsDto |
+| &emsp;&emsp;address     | 分布区域      |          | false    | string            |               |
+| &emsp;&emsp;alias       | 别名          |          | false    | string            |               |
+| &emsp;&emsp;branch      | 科            |          | false    | string            |               |
+| &emsp;&emsp;description | 描述信息      |          | false    | string            |               |
+| &emsp;&emsp;genus       | 属            |          | false    | string            |               |
+| &emsp;&emsp;id          |               |          | false    | string            |               |
+| &emsp;&emsp;imagesUrl   | 图片地址      |          | false    | string            |               |
+| &emsp;&emsp;modifyTime  |               |          | false    | string(date-time) |               |
+| &emsp;&emsp;plantName   | 植物名称      |          | false    | string            |               |
+| &emsp;&emsp;remarks     | 备注          |          | false    | string            |               |
+| &emsp;&emsp;species     | 种            |          | false    | string            |               |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 201    | Created      |        |
 | 401    | Unauthorized |        |
 | 403    | Forbidden    |        |
 | 404    | Not Found    |        |
@@ -1532,7 +2879,9 @@
 **请求参数**:
 
 
-暂无
+| 参数名称    | 参数说明    | 请求类型 | 是否必须 | 数据类型       | schema |
+| ----------- | ----------- | -------- | -------- | -------------- | ------ |
+| currentPage | currentPage | query    | true     | integer(int32) |        |
 
 
 **响应状态**:
@@ -1562,14 +2911,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -1626,18 +2968,68 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
 ### species-controller
+
+
+#### 删除物种
+
+
+**接口地址**:`/directory/species/deleteSpecies`
+
+
+**请求方式**:`DELETE`
+
+
+**请求数据类型**:`application/x-www-form-urlencoded`
+
+
+**响应数据类型**:`*/*`
+
+
+**接口描述**:
+
+
+**请求参数**:
+
+
+| 参数名称  | 参数说明  | 请求类型 | 是否必须 | 数据类型 | schema |
+| --------- | --------- | -------- | -------- | -------- | ------ |
+| speciesId | speciesId | query    | true     | string   |        |
+
+
+**响应状态**:
+
+
+| 状态码 | 说明         | schema |
+| ------ | ------------ | ------ |
+| 200    | OK           | Result |
+| 204    | No Content   |        |
+| 401    | Unauthorized |        |
+| 403    | Forbidden    |        |
+
+
+**响应参数**:
+
+
+| 参数名称  | 参数说明 | 类型              | schema            |
+| --------- | -------- | ----------------- | ----------------- |
+| details   |          | string            |                   |
+| info      |          | string            |                   |
+| message   |          | object            |                   |
+| path      |          | string            |                   |
+| status    |          | integer(int32)    | integer(int32)    |
+| timestamp |          | string(date-time) | string(date-time) |
+
+
+**响应示例**:
+
+```javascript
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+```
 
 
 #### 获取种总数
@@ -1698,13 +3090,13 @@
 #### 种类插入图片
 
 
-**接口地址**:`/directory/species/insertImageByName`
+**接口地址**:`/directory/species/insertImageById`
 
 
-**请求方式**:`GET`
+**请求方式**:`POST`
 
 
-**请求数据类型**:`application/x-www-form-urlencoded`
+**请求数据类型**:`multipart/form-data`
 
 
 **响应数据类型**:`*/*`
@@ -1716,10 +3108,10 @@
 **请求参数**:
 
 
-| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
-| -------- | -------- | -------- | -------- | -------- | ------ |
-| imageUrl | imageUrl | query    | false    | string   |        |
-| name     | name     | query    | false    | string   |        |
+| 参数名称  | 参数说明  | 请求类型 | 是否必须 | 数据类型 | schema |
+| --------- | --------- | -------- | -------- | -------- | ------ |
+| file      | file      | formData | true     | file     |        |
+| speciesId | speciesId | query    | true     | string   |        |
 
 
 **响应状态**:
@@ -1728,6 +3120,7 @@
 | 状态码 | 说明         | schema |
 | ------ | ------------ | ------ |
 | 200    | OK           | Result |
+| 201    | Created      |        |
 | 401    | Unauthorized |        |
 | 403    | Forbidden    |        |
 | 404    | Not Found    |        |
@@ -1771,13 +3164,24 @@
 **接口描述**:
 
 
+**请求示例**:
+
+
+```javascript
+{  "genusId": "",  "id": "",  "modifyTime": "",  "species": ""}
+```
+
+
 **请求参数**:
 
 
-| 参数名称 | 参数说明 | 请求类型 | 是否必须 | 数据类型 | schema |
-| -------- | -------- | -------- | -------- | -------- | ------ |
-| species  | species  | query    | true     | string   |        |
-| genusId  | genusId  | query    | false    | string   |        |
+| 参数名称               | 参数说明       | 请求类型 | 是否必须 | 数据类型          | schema         |
+| ---------------------- | -------------- | -------- | -------- | ----------------- | -------------- |
+| postSpeciesDto         | postSpeciesDto | body     | true     | PostSpeciesDto    | PostSpeciesDto |
+| &emsp;&emsp;genusId    | 属的id         |          | false    | string            |                |
+| &emsp;&emsp;id         |                |          | false    | string            |                |
+| &emsp;&emsp;modifyTime |                |          | false    | string(date-time) |                |
+| &emsp;&emsp;species    | 种名           |          | false    | string            |                |
 
 
 **响应状态**:
@@ -1808,14 +3212,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -1840,7 +3237,9 @@
 **请求参数**:
 
 
-暂无
+| 参数名称    | 参数说明    | 请求类型 | 是否必须 | 数据类型       | schema |
+| ----------- | ----------- | -------- | -------- | -------------- | ------ |
+| currentPage | currentPage | query    | true     | integer(int32) |        |
 
 
 **响应状态**:
@@ -1931,68 +3330,6 @@
 ```
 
 
-#### 获取所有图片为空的种类
-
-
-**接口地址**:`/directory/species/searchSpeciesWhereImageNull`
-
-
-**请求方式**:`GET`
-
-
-**请求数据类型**:`application/x-www-form-urlencoded`
-
-
-**响应数据类型**:`*/*`
-
-
-**接口描述**:
-
-
-**请求参数**:
-
-
-暂无
-
-
-**响应状态**:
-
-
-| 状态码 | 说明         | schema |
-| ------ | ------------ | ------ |
-| 200    | OK           | Result |
-| 401    | Unauthorized |        |
-| 403    | Forbidden    |        |
-| 404    | Not Found    |        |
-
-
-**响应参数**:
-
-
-| 参数名称  | 参数说明 | 类型              | schema            |
-| --------- | -------- | ----------------- | ----------------- |
-| details   |          | string            |                   |
-| info      |          | string            |                   |
-| message   |          | object            |                   |
-| path      |          | string            |                   |
-| status    |          | integer(int32)    | integer(int32)    |
-| timestamp |          | string(date-time) | string(date-time) |
-
-
-**响应示例**:
-
-```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
-```
-
-
 ### user-controller
 
 
@@ -2050,14 +3387,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -2112,14 +3442,7 @@
 **响应示例**:
 
 ```javascript
-{
-	"details": "",
-	"info": "",
-	"message": {},
-	"path": "",
-	"status": 0,
-	"timestamp": ""
-}
+{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
 ```
 
 
@@ -2207,16 +3530,16 @@
 **请求参数**:
 
 
-| 参数名称             | 参数说明    | 请求类型 | 是否必须 | 数据类型    | schema      |
-| -------------------- | ----------- | -------- | -------- | ----------- | ----------- |
-| postUserDto          | postUserDto | body     | true     | PostUserDto | PostUserDto |
-| &emsp;&emsp;city     | 城市        |          | false    | string      |             |
-| &emsp;&emsp;country  | 国家        |          | false    | string      |             |
-| &emsp;&emsp;gender   | 用户性别    |          | false    | integer     |             |
-| &emsp;&emsp;imageUrl | 头像地址    |          | false    | string      |             |
-| &emsp;&emsp;nickName | 用户名      |          | false    | string      |             |
-| &emsp;&emsp;openId   | openID      |          | false    | string      |             |
-| &emsp;&emsp;province | 省份        |          | false    | string      |             |
+| 参数名称             | 参数说明    | 请求类型 | 是否必须 | 数据类型       | schema      |
+| -------------------- | ----------- | -------- | -------- | -------------- | ----------- |
+| postUserDto          | postUserDto | body     | true     | PostUserDto    | PostUserDto |
+| &emsp;&emsp;city     | 城市        |          | false    | string         |             |
+| &emsp;&emsp;country  | 国家        |          | false    | string         |             |
+| &emsp;&emsp;gender   | 用户性别    |          | false    | integer(int32) |             |
+| &emsp;&emsp;imageUrl | 头像地址    |          | false    | string         |             |
+| &emsp;&emsp;nickName | 用户名      |          | false    | string         |             |
+| &emsp;&emsp;openId   | openID      |          | false    | string         |             |
+| &emsp;&emsp;province | 省份        |          | false    | string         |             |
 
 
 **响应状态**:
@@ -2475,9 +3798,16 @@
 | status    |          | integer(int32)    | integer(int32)    |
 | timestamp |          | string(date-time) | string(date-time) |
 
-
 **响应示例**:
 
 ```javascript
-{	"details": "",	"info": "",	"message": {},	"path": "",	"status": 0,	"timestamp": ""}
+{
+	"details": "",
+	"info": "",
+	"message": {},
+	"path": "",
+	"status": 0,
+	"timestamp": ""
+}
 ```
+
