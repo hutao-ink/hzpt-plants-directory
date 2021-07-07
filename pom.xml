@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>hzpt.plants</groupId>
-    <artifactId>hzpt-plants-directory</artifactId>
+    <artifactId>hzpt-plants-directory-simple</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>hzpt-plants-directory</name>
+    <name>hzpt-plants-directory-simple</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
