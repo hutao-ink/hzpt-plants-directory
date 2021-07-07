@@ -15,12 +15,6 @@ import java.util.List;
  */
 public interface AnimalsService extends IService<Animals> {
     /**
-     * <p>通过名字模糊查询</p>
-     * @author tfj
-     * @since 2021/6/8
-     */
-    Result fuzzyQuery(String name, String path);
-    /**
      * <p>通过名字模糊查询返回VO</p>
      * @author tfj
      * @since 2021/6/8

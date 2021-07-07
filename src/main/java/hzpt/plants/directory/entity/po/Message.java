@@ -37,7 +37,7 @@ public class Message {
 
     @TableField("deleted")
     @TableLogic
-    private String deleted;
+    private int deleted;
 
     @ApiModelProperty(value = "创建时间")
     @TableField("createTime")

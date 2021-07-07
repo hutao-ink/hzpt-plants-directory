@@ -3,6 +3,7 @@ package hzpt.plants.directory.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.service.MessageService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,9 @@ import javax.annotation.Resource;
  * @since 2021/6/12
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/message")
+@Api(tags = "留言")
 public class MessageController {
     @Resource
     private MessageService messageService;

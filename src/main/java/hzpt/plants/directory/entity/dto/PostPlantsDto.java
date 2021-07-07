@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
 
 /**
  * <p></p>
@@ -38,8 +37,6 @@ public class PostPlantsDto {
     @TableField("remarks")
     private String remarks;
 
-    @TableField("modifyTime")
-    private Date modifyTime;
 
     @ApiModelProperty(value = "科")
     @TableField("branch")

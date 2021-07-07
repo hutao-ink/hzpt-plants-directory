@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostBranchDto;
 import hzpt.plants.directory.service.BranchService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +21,9 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/branch")
+@Api(tags = "科")
 public class BranchController {
     @Resource
     private BranchService branchService;
@@ -71,17 +73,6 @@ public class BranchController {
         return branchService.searchAnimalBranch("/branch/searchAnimalBranch");
     }
 
-
-    /**
-     * <p>通过科名获取科信息</p>
-     * @author tfj
-     * @since 2021/6/16
-     */
-    @ApiOperation(value = "通过科名获取科信息")
-    @GetMapping("/getBranchInfo")
-    public Result getBranchInfo(@RequestParam String branch){
-        return branchService.getBranchInfo(branch,"/genus/getBranchInfo");
-    }
 
     /**
      * <p>添加科目</p>

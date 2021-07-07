@@ -6,6 +6,7 @@ import hzpt.plants.directory.entity.dto.PostUserDto;
 import hzpt.plants.directory.entity.vo.GetUserInfoVo;
 import hzpt.plants.directory.mapper.UserMapper;
 import hzpt.plants.directory.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +20,9 @@ import javax.annotation.Resource;
  * @since 2021/6/7
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/user")
+@Api(tags = "用户")
 public class UserController {
 
     @Resource
@@ -99,9 +101,6 @@ public class UserController {
         }
         return userService.userAddMessage(message,openId,messageId,"/user/userAddMessage");
     }
-
-
-
     /**
      * <p>通过用户openId获取用户留言</p>
      * @author tfj

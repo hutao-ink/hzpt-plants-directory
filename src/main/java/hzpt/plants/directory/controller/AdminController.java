@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.service.AdminService;
 import hzpt.plants.directory.service.CipherService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +16,9 @@ import javax.annotation.Resource;
  * @since 2021/6/21
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/admin")
+@Api(tags = "管理员")
 public class AdminController {
 
     @Resource
@@ -32,7 +34,7 @@ public class AdminController {
     @ApiOperation(value = "管理员登录")
     @GetMapping("/login")
     public Result login(@RequestParam String nickName,String cipher){
-       return adminService.login(nickName,cipher,"admin/login");
+       return adminService.login(nickName,cipher,"/admin/login");
     }
 
     /**

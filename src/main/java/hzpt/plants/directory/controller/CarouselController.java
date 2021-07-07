@@ -3,6 +3,7 @@ package hzpt.plants.directory.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.service.CarouselService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,12 +19,12 @@ import javax.annotation.Resource;
  * @since 2021-06-08
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/carousel")
+@Api(tags = "轮播图")
 public class CarouselController {
     @Resource
     private CarouselService carouselService;
-
     /**
      * <p>获取所有轮播图</p>
      * @author tfj

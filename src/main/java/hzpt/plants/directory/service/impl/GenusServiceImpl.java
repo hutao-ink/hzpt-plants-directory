@@ -1,12 +1,11 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostGenusDto;
-import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.entity.po.Genus;
 import hzpt.plants.directory.mapper.GenusMapper;
 import hzpt.plants.directory.service.GenusService;
@@ -67,12 +66,6 @@ public class GenusServiceImpl extends ServiceImpl<GenusMapper, Genus> implements
     public Result searchGenusByBranchId(String id, String path) {
         List<Genus> genusList = genusMapper.selectList(new QueryWrapper<Genus>().eq("branchId", id));
         return new Result().result200(genusList,path);
-    }
-
-    @Override
-    public Result getGenusInfo(String genus, String path) {
-        Genus selectOne = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", genus));
-        return new Result().result200(selectOne,path);
     }
     /**
      * <p>修改属目</p>

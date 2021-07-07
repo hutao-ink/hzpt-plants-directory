@@ -1,11 +1,9 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.util.IdUtil;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.model.PutObjectRequest;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.config.OssConfig;
 import hzpt.plants.directory.entity.dto.PostUserDto;
@@ -19,11 +17,10 @@ import hzpt.plants.directory.service.PlantsService;
 import hzpt.plants.directory.service.UserService;
 import hzpt.plants.directory.config.WxConfig;
 import hzpt.plants.directory.utils.BeansUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +32,7 @@ import java.util.List;
  * @since 2021/6/8
  */
 @Service
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
@@ -55,6 +53,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserPermissionMapper userPermissionMapper;
     @Resource
     private PermissionMapper permissionMapper;
+    @Resource
+    private UserService userService;
 
     /**
      * <p>用户搜索动植物</p>
@@ -116,9 +116,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         getUser.setProvince(postUserDto.getProvince());
         getUser.setCountry(postUserDto.getCountry());
         getUser.setCreateTime(new Date());
-
-        userMapper.update(getUser,new QueryWrapper<User>().eq("openId",postUserDto.getOpenId()));
-
+        log.info(getUser.toString());
+        System.out.println(getUser+"=====");
+        userMapper.updateById(getUser);
         return new Result().result200(getUser.toString(),path);
     }
 
@@ -141,37 +141,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Result userAddImages(MultipartFile multipartFile,String openId, String path) {
-        OSS ossClient=new OSSClientBuilder().build(ossConfig.getEndpoint(),ossConfig.getAccessKeyId(),ossConfig.getAccessKeySecret());
-        if (multipartFile!=null){
-            String originalFilename = multipartFile.getOriginalFilename();
-
-            PutObjectRequest putObjectRequest = null;
-            try {
-                putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(multipartFile.getBytes()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ossClient.putObject(putObjectRequest);
-            ossClient.shutdown();
-
-            String imagesUrl=ossConfig.getDomain()+originalFilename;
-
-            Message addMessage=new Message();
-            addMessage.setId(IdUtil.simpleUUID());
-            addMessage.setImagesUrl(imagesUrl);
-            addMessage.setOpenId(openId);
-            addMessage.setCreateTime(new Date());
-
-            messageMapper.insert(addMessage);
-
-            Message message = messageMapper.selectOne(new QueryWrapper<Message>().eq("id", addMessage.getId()));
-            if (message.getUserMessage()==null){
-                messageMapper.delete(new QueryWrapper<Message>().eq("userMessage",null));
-            }
+        String uploadImage = ossConfig.uploadImage(multipartFile);
+        Message addMessage=new Message();
+        addMessage.setId(IdUtil.simpleUUID());
+        addMessage.setImagesUrl(uploadImage);
+        addMessage.setOpenId(openId);
+        addMessage.setCreateTime(new Date());
+        if (messageMapper.insert(addMessage)==1){
             return new Result().result200(addMessage.getId(),path);
-        }else {
-            return new Result().result200("请选择图片:",path);
         }
+        return new Result().result200("请选择图片:",path);
     }
     /**
      * <p>用户留言</p>
@@ -184,6 +163,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return new Result().result500("留言不得少于5个字:",path);
         }
         Message selectOne = messageMapper.selectOne(new QueryWrapper<Message>().eq("id", messageId));
+
         if (selectOne!=null){
             selectOne.setUserMessage(message);
             messageMapper.updateById(selectOne);
@@ -194,6 +174,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             addMessage.setOpenId(openId);
             addMessage.setUserMessage(message);
             addMessage.setCreateTime(new Date());
+            addMessage.setDeleted(0);
             messageMapper.insert(addMessage);
             return new Result().result200("留言成功",path);
         }
@@ -216,7 +197,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Result getAllMessage(String path) {
-        List<GetMessagesVo> allMessage = messageMapper.getAllMessage();
+        List<GetMessagesVo> allMessage = messageMapper.getAllMessage(0);
         return new Result().result200(allMessage,path);
     }
 }

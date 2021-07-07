@@ -1,10 +1,10 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostPlantsDto;
 import hzpt.plants.directory.entity.po.*;
@@ -119,56 +119,51 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
      */
     @Override
     public Result insertPlant(PostPlantsDto postPlantsDto, String path) {
+
         Branch branch = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", postPlantsDto.getBranch()));
-        if (branch==null){
-            Branch newBranch = new Branch();
-            newBranch.setId(IdUtil.simpleUUID());
-            newBranch.setCreateTime(new Date());
-            newBranch.setType(0);
-            newBranch.setBranch(postPlantsDto.getBranch());
-            branchMapper.insert(newBranch);
-        }else {
-            String branchId = branch.getId();
-            Genus genus = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", postPlantsDto.getGenus()));
-            if (genus==null){
-                Genus newGenus=new Genus();
-                newGenus.setId(IdUtil.simpleUUID());
-                newGenus.setGenus(postPlantsDto.getGenus());
-                newGenus.setBranchId(branchId);
-                newGenus.setCreateTime(new Date());
-                genusMapper.insert(newGenus);
-            }else {
-                String genusId = genus.getId();
-                Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", postPlantsDto.getSpecies()));
-                if (species==null){
-                    Species newSpecies=new Species();
-                    newSpecies.setId(IdUtil.simpleUUID());
-                    newSpecies.setSpecies(postPlantsDto.getSpecies());
-                    newSpecies.setGenusId(genusId);
-                    newSpecies.setCreateTime(new Date());
-                    speciesMapper.insert(newSpecies);
-                }else {
-                    String speciesId = species.getId();
-                    Plants plants = plantsMapper.selectOne(new QueryWrapper<Plants>().eq("plantName", postPlantsDto.getPlantName()));
-                    if (plants==null){
-                        Plants newPlant=new Plants();
-                        newPlant.setId(IdUtil.simpleUUID());
-                        newPlant.setPlantName(postPlantsDto.getPlantName());
-                        newPlant.setAlias(postPlantsDto.getAlias());
-                        newPlant.setDescription(postPlantsDto.getDescription());
-                        newPlant.setRemarks(postPlantsDto.getRemarks());
-                        newPlant.setCreateTime(new Date());
-                        newPlant.setImagesUrl(postPlantsDto.getImagesUrl());
-                        newPlant.setSpeciesId(speciesId);
-                        plantsMapper.insert(newPlant);
-                        return new Result().result200("添加植物成功",path);
-                    }else {
-                        return new Result().result500("该植物已存在，请选择修改植物",path);
-                    }
-                }
-            }
+        Genus genus = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", postPlantsDto.getGenus()));
+        Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", postPlantsDto.getSpecies()));
+        Plants plants = plantsMapper.selectOne(new QueryWrapper<Plants>().eq("plantName", postPlantsDto.getPlantName()));
+
+        if (branch!=null&&genus!=null&&species!=null&&plants!=null) {
+            return new Result().result500("已存在植物信息，添加失败",path);
         }
-        return new Result().result500("添加失败",path);
+
+        Branch newBranch = new Branch();
+        newBranch.setId(IdUtil.simpleUUID());
+        newBranch.setCreateTime(new Date());
+        newBranch.setType(0);
+        newBranch.setBranch(postPlantsDto.getBranch());
+        newBranch.setImagesUrl(postPlantsDto.getImagesUrl());
+        branchMapper.insert(newBranch);
+
+        Genus newGenus = new Genus();
+        newGenus.setId(IdUtil.simpleUUID());
+        newGenus.setGenus(postPlantsDto.getGenus());
+        newGenus.setBranchId(newBranch.getId());
+        newGenus.setCreateTime(new Date());
+        genusMapper.insert(newGenus);
+
+        Species newSpecies = new Species();
+        newSpecies.setId(IdUtil.simpleUUID());
+        newSpecies.setSpecies(postPlantsDto.getSpecies());
+        newSpecies.setGenusId(newGenus.getId());
+        newSpecies.setImagesUrl(postPlantsDto.getImagesUrl());
+        newSpecies.setCreateTime(new Date());
+        speciesMapper.insert(newSpecies);
+
+        Plants newPlant = new Plants();
+        newPlant.setId(IdUtil.simpleUUID());
+        newPlant.setAlias(postPlantsDto.getAlias());
+        newPlant.setPlantName(postPlantsDto.getPlantName());
+        newPlant.setDescription(postPlantsDto.getDescription());
+        newPlant.setRemarks(postPlantsDto.getRemarks());
+        newPlant.setCreateTime(new Date());
+        newPlant.setImagesUrl(postPlantsDto.getImagesUrl());
+        newPlant.setSpeciesId(newSpecies.getId());
+        plantsMapper.insert(newPlant);
+
+        return new Result().result500("添加成功",path);
     }
     /**
      * <p>修改植物</p>
@@ -198,9 +193,11 @@ public class PlantsServiceImpl extends ServiceImpl<PlantsMapper, Plants> impleme
 
         Plants plants = plantsMapper.selectOne(new QueryWrapper<Plants>().eq("id", plantId));
         plants.setAddress(postPlantsDto.getAddress());
+        plants.setImagesUrl(postPlantsDto.getImagesUrl());
         plants.setDescription(postPlantsDto.getDescription());
         plants.setRemarks(postPlantsDto.getRemarks());
         plants.setSpeciesId(speciesId);
+        plants.setPlantName(postPlantsDto.getPlantName());
         plants.setAlias(postPlantsDto.getAlias());
         plants.setModifyTime(new Date());
 

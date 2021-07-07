@@ -33,6 +33,7 @@ public class Animals {
     private String imagesUrl;
 
     @ApiModelProperty(value = "描述信息")
+    @TableField("description")
     private String description;
 
     @ApiModelProperty(value = "种类id")

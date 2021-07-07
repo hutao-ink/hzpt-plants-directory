@@ -5,6 +5,7 @@ import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostAnimalsDto;
 import hzpt.plants.directory.entity.dto.PostPlantsDto;
 import hzpt.plants.directory.service.AnimalsService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,21 +17,12 @@ import javax.annotation.Resource;
  * @since 2021/6/7 16
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/animals")
+@Api(tags = "动物")
 public class AnimalsController {
     @Resource
     private AnimalsService animalsService;
-    /**
-     * <p>通过名字模糊查询</p>
-     * @author tfj
-     * @since 2021/6/7
-     */
-    @ApiOperation(value = "通过名字模糊查询")
-    @GetMapping("/fuzzyQuery")
-    public Result fuzzyQuery(@RequestParam String name){
-        return animalsService.fuzzyQuery(name,"/animals/fuzzyQuery");
-    }
 
     /**
      * <p>通过动物id获取动物所有信息</p>

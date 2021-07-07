@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostGenusDto;
 import hzpt.plants.directory.service.GenusService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,9 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/genus")
+@Api(tags = "属")
 public class GenusController {
     @Resource
     private GenusService genusService;
@@ -56,17 +58,6 @@ public class GenusController {
     @GetMapping("/searchGenusByBranchId")
     public Result searchGenusByBranchId(@RequestParam String id){
         return genusService.searchGenusByBranchId(id,"/genus/searchGenusByBranchId");
-    }
-
-    /**
-     * <p>通过属名获取属信息</p>
-     * @author tfj
-     * @since 2021/6/16
-     */
-    @ApiOperation(value = "通过属名获取属信息")
-    @GetMapping("/getGenusInfo")
-    public Result getGenusInfo(@RequestParam String genus){
-        return genusService.getGenusInfo(genus,"/genus/getGenusInfo");
     }
 
     /**

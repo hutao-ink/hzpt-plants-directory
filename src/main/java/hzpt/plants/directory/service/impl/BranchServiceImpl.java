@@ -1,16 +1,12 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.util.IdUtil;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.config.OssConfig;
 import hzpt.plants.directory.entity.dto.PostBranchDto;
-import hzpt.plants.directory.entity.po.Animals;
 import hzpt.plants.directory.entity.po.Branch;
 import hzpt.plants.directory.mapper.BranchMapper;
 import hzpt.plants.directory.service.BranchService;
@@ -19,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -92,39 +86,16 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
         return new Result().result200(type,path);
     }
     /**
-     * <p>通过科名获取科信息</p>
-     * @author tfj
-     * @since 2021/6/16
-     */
-    @Override
-    public Result getBranchInfo(String branch, String path) {
-        Branch selectOne = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", branch));
-        return new Result().result200(selectOne,path);
-    }
-    /**
      * <p>添加科目图片</p>
      * @author tfj
      * @since 2021/6/22
      */
     @Override
     public Result insertBranchImage(MultipartFile file, String branchName, String path) {
-        OSS ossClient = new OSSClientBuilder().build(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());
-        if (file != null) {
-            String originalFilename = file.getOriginalFilename();
-
-            PutObjectRequest putObjectRequest = null;
-            try {
-                putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(file.getBytes()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ossClient.putObject(putObjectRequest);
-            ossClient.shutdown();
-
-            String imagesUrl = ossConfig.getDomain() + originalFilename;
-            Branch selectOne = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", branchName));
-            selectOne.setImagesUrl(imagesUrl);
-            branchMapper.updateById(selectOne);
+        String uploadImage = ossConfig.uploadImage(file);
+        Branch selectOne = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", branchName));
+        selectOne.setImagesUrl(uploadImage);
+        if (branchMapper.updateById(selectOne)==1){;
             return new Result().result200("添加科目图片成功",path);
         }
         return new Result().result500("添加科目图片失败",path);
@@ -165,22 +136,10 @@ public class BranchServiceImpl extends ServiceImpl<BranchMapper, Branch> impleme
      */
     @Override
     public Result putBranchImage(MultipartFile file, String branchId, String path) {
-        OSS ossClient = new OSSClientBuilder().build(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());
-        if (file != null) {
-            String originalFilename = file.getOriginalFilename();
-            PutObjectRequest putObjectRequest = null;
-            try {
-                putObjectRequest = new PutObjectRequest(ossConfig.getBucketName(), originalFilename, new ByteArrayInputStream(file.getBytes()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ossClient.putObject(putObjectRequest);
-            ossClient.shutdown();
-
-            String imagesUrl = ossConfig.getDomain() + originalFilename;
-            Branch branch = branchMapper.selectOne(new QueryWrapper<Branch>().eq("id", branchId));
-            branch.setImagesUrl(imagesUrl);
-            branchMapper.updateById(branch);
+        String uploadImage = ossConfig.uploadImage(file);
+        Branch branch = branchMapper.selectOne(new QueryWrapper<Branch>().eq("id", branchId));
+        branch.setImagesUrl(uploadImage);
+        if (branchMapper.updateById(branch)==1){;
             return new Result().result200("修改科目图片成功",path);
         }
         return new Result().result500("修改科目图片失败",path);

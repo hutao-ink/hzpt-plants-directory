@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostPlantsDto;
 import hzpt.plants.directory.service.PlantsService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,9 @@ import javax.annotation.Resource;
  * @since 2021-06-06
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/plants")
+@Api(tags = "植物")
 public class PlantsController {
     @Resource
     private PlantsService plantsService;
@@ -71,11 +73,11 @@ public class PlantsController {
     }
 
     /**
-     * <p>通过生物id查询植物所有信息</p>
+     * <p>通过生物id查询动植物所有信息</p>
      * @author tfj
      * @since 2021/6/7
      */
-    @ApiOperation(value = "通过生物id查询植物所有信息")
+    @ApiOperation(value = "通过生物id查询动植物所有信息")
     @GetMapping("/queryPlantById")
     public Result queryPlantById(@RequestParam String id){
         return plantsService.queryPlantById(id,"/plants/queryPlantById");

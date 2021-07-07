@@ -75,12 +75,6 @@
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
         </dependency>
-        <!--HuTool工具包-->
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.6.3</version>
-        </dependency>
         <!--xiaoTools-->
         <dependency>
             <groupId>io.github.xiaoxunyao</groupId>

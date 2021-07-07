@@ -3,6 +3,7 @@ package hzpt.plants.directory.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.service.PermissionService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,9 @@ import javax.annotation.Resource;
  * @since 2021/6/21
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/permission")
+@Api(tags = "权限")
 public class PermissionController {
 
     @Resource

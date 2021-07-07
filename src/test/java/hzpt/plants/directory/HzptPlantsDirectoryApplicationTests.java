@@ -1,8 +1,8 @@
 package hzpt.plants.directory;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.IdUtil;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import hzpt.plants.directory.entity.po.*;
 import hzpt.plants.directory.entity.vo.GetMessagesVo;
 import hzpt.plants.directory.entity.vo.GetPlantsAllInfoVo;
@@ -12,12 +12,9 @@ import hzpt.plants.directory.mapper.*;
 import hzpt.plants.directory.service.*;
 import hzpt.plants.directory.utils.BeansUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.types.RedisClientInfo;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -153,7 +150,7 @@ class HzptPlantsDirectoryApplicationTests {
 
     @Test
     public void idCreate(){
-        for (int i = 0; i < 41; i++) {
+        for (int i = 0; i < 5; i++) {
             String s = IdUtil.simpleUUID();
             System.out.println(s);
         }
@@ -167,7 +164,7 @@ class HzptPlantsDirectoryApplicationTests {
 
     @Test
     public void test5(){
-        List<GetMessagesVo> allMessage = messageMapper.getAllMessage();
+        List<GetMessagesVo> allMessage = messageMapper.getAllMessage(0);
         allMessage.forEach(getMessagesVo -> System.out.println(getMessagesVo));
     }
 

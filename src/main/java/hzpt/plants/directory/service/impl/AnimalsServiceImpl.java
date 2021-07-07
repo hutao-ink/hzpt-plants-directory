@@ -1,11 +1,11 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.dto.PostAnimalsDto;
 import hzpt.plants.directory.entity.po.*;
@@ -37,21 +37,6 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
     private GenusMapper genusMapper;
     @Resource
     private SpeciesMapper speciesMapper;
-    /**
-     * <p>通过名字模糊查询</p>
-     * @author tfj
-     * @since 2021/6/8
-     */
-    @Override
-    public Result fuzzyQuery(String name, String path) {
-        List<Animals> animalsList = animalsMapper.selectList(new QueryWrapper<Animals>().like("animalName", name)
-                .or().like("alias",name)
-                .or().like("description",name)
-                .or().like("address",name)
-                .or().like("remarks",name));
-        List<GetAnimalsVo> getAnimalsVos = BeansUtils.listCopy(animalsList, GetAnimalsVo.class);
-        return new Result().result200(getAnimalsVos,path);
-    }
 
     /**
      * <p>通过名字模糊查询返回VO</p>
@@ -110,56 +95,53 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
      */
     @Override
     public Result insertPlant(PostAnimalsDto postAnimalsDto, String path) {
+
         Branch branch = branchMapper.selectOne(new QueryWrapper<Branch>().eq("branch", postAnimalsDto.getBranch()));
-        if (branch==null){
-            Branch newBranch = new Branch();
-            newBranch.setId(IdUtil.simpleUUID());
-            newBranch.setCreateTime(new Date());
-            newBranch.setType(1);
-            newBranch.setBranch(postAnimalsDto.getBranch());
-            branchMapper.insert(newBranch);
-        }else {
-            String branchId = branch.getId();
-            Genus genus = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", postAnimalsDto.getGenus()));
-            if (genus==null){
-                Genus newGenus=new Genus();
-                newGenus.setId(IdUtil.simpleUUID());
-                newGenus.setGenus(postAnimalsDto.getGenus());
-                newGenus.setBranchId(branchId);
-                newGenus.setCreateTime(new Date());
-                genusMapper.insert(newGenus);
-            }else {
-                String genusId = genus.getId();
-                Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", postAnimalsDto.getSpecies()));
-                if (species==null){
-                    Species newSpecies=new Species();
-                    newSpecies.setId(IdUtil.simpleUUID());
-                    newSpecies.setSpecies(postAnimalsDto.getSpecies());
-                    newSpecies.setGenusId(genusId);
-                    newSpecies.setCreateTime(new Date());
-                    speciesMapper.insert(newSpecies);
-                }else {
-                    String speciesId = species.getId();
-                    Animals animals = animalsMapper.selectOne(new QueryWrapper<Animals>().eq("animalName", postAnimalsDto.getAnimalName()));
-                    if (animals==null){
-                        Animals newAnimal=new Animals();
-                        newAnimal.setId(IdUtil.simpleUUID());
-                        newAnimal.setAnimalName(postAnimalsDto.getAnimalName());
-                        newAnimal.setAlias(postAnimalsDto.getAlias());
-                        newAnimal.setDescription(postAnimalsDto.getDescription());
-                        newAnimal.setRemarks(postAnimalsDto.getRemarks());
-                        newAnimal.setCreateTime(new Date());
-                        newAnimal.setImagesUrl(postAnimalsDto.getImagesUrl());
-                        newAnimal.setSpeciesId(speciesId);
-                        animalsMapper.insert(newAnimal);
-                        return new Result().result200("添加动物物成功",path);
-                    }else {
-                        return new Result().result500("该动物已存在，请选择修改动物",path);
-                    }
-                }
-            }
+        Genus genus = genusMapper.selectOne(new QueryWrapper<Genus>().eq("genus", postAnimalsDto.getGenus()));
+        Species species = speciesMapper.selectOne(new QueryWrapper<Species>().eq("species", postAnimalsDto.getSpecies()));
+        Animals animals = animalsMapper.selectOne(new QueryWrapper<Animals>().eq("animalName", postAnimalsDto.getAnimalName()));
+
+        if (branch!=null&&genus!=null&&species!=null&&animals!=null) {
+            return new Result().result500("已存在动物信息，添加失败",path);
         }
-        return new Result().result500("添加失败",path);
+
+        Branch newBranch = new Branch();
+        newBranch.setId(IdUtil.simpleUUID());
+        newBranch.setCreateTime(new Date());
+        newBranch.setType(1);
+        newBranch.setBranch(postAnimalsDto.getBranch());
+        newBranch.setImagesUrl(postAnimalsDto.getImagesUrl());
+        branchMapper.insert(newBranch);
+
+        Genus newGenus = new Genus();
+        newGenus.setId(IdUtil.simpleUUID());
+        newGenus.setGenus(postAnimalsDto.getGenus());
+        newGenus.setBranchId(newBranch.getId());
+        newGenus.setCreateTime(new Date());
+        genusMapper.insert(newGenus);
+
+        Species newSpecies = new Species();
+        newSpecies.setId(IdUtil.simpleUUID());
+        newSpecies.setSpecies(postAnimalsDto.getSpecies());
+        newSpecies.setGenusId(newGenus.getId());
+        newSpecies.setImagesUrl(postAnimalsDto.getImagesUrl());
+        newSpecies.setCreateTime(new Date());
+        speciesMapper.insert(newSpecies);
+
+        Animals newAnimal = new Animals();
+        newAnimal.setId(IdUtil.simpleUUID());
+        newAnimal.setAlias(postAnimalsDto.getAlias());
+        newAnimal.setAnimalName(postAnimalsDto.getAnimalName());
+        newAnimal.setDescription(postAnimalsDto.getDescription());
+        newAnimal.setAddress(postAnimalsDto.getAddress());
+        newAnimal.setRemarks(postAnimalsDto.getRemarks());
+        newAnimal.setCreateTime(new Date());
+        newAnimal.setImagesUrl(postAnimalsDto.getImagesUrl());
+        newAnimal.setSpeciesId(newSpecies.getId());
+        System.out.println(newAnimal+"===========>newAnimal");
+        animalsMapper.insert(newAnimal);
+
+        return new Result().result200("添加成功",path);
     }
     /**
      * <p>修改动物</p>
@@ -187,9 +169,12 @@ public class AnimalsServiceImpl extends ServiceImpl<AnimalsMapper, Animals> impl
         String speciesId = species.getId();
 
         Animals animals = animalsMapper.selectOne(new QueryWrapper<Animals>().eq("id", animalId));
+        System.out.println(postAnimalsDto.getAnimalName()+"=============>动物名称");
+        animals.setAnimalName(postAnimalsDto.getAnimalName());
         animals.setAddress(postAnimalsDto.getAddress());
         animals.setDescription(postAnimalsDto.getDescription());
         animals.setRemarks(postAnimalsDto.getRemarks());
+        animals.setImagesUrl(postAnimalsDto.getImagesUrl());
         animals.setSpeciesId(speciesId);
         animals.setAlias(postAnimalsDto.getAlias());
         animals.setModifyTime(new Date());

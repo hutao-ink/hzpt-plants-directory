@@ -1,10 +1,9 @@
 package hzpt.plants.directory.service.impl;
 
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xiaoTools.core.IdUtil.IdUtil;
 import com.xiaoTools.core.result.Result;
 import hzpt.plants.directory.entity.po.Permission;
-import hzpt.plants.directory.entity.po.UserPermission;
 import hzpt.plants.directory.mapper.PermissionMapper;
 import hzpt.plants.directory.mapper.UserPermissionMapper;
 import hzpt.plants.directory.service.PermissionService;

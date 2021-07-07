@@ -1,9 +1,12 @@
 package hzpt.plants.directory.entity.vo;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -16,6 +19,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@TableName("tbl_message")
 public class GetMessagesVo {
 
     private String id;
@@ -40,6 +45,7 @@ public class GetMessagesVo {
     @ApiModelProperty(value = "头像地址")
     @TableField("imageUrl")
     private String imageUrl;
+
 
     @ApiModelProperty(value = "创建时间")
     @TableField("createTime")

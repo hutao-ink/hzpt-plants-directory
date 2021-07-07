@@ -23,8 +23,6 @@ import java.util.List;
 public class StpInterfaceImpl implements StpInterface {
     @Resource
     private UserMapper userMapper;
-    @Resource
-    private RedisTemplate<String,Object> redisTemplate;
 
     @Override
     public List<String> getPermissionList(Object openId, String s) {

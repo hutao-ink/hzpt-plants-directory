@@ -14,5 +14,5 @@ import java.util.List;
 public interface MessageMapper extends BaseMapper<Message> {
     List<GetMessagesVo> getUserMessageById(String openId);
 
-    List<GetMessagesVo> getAllMessage();
+    List<GetMessagesVo> getAllMessage(int deleted);
 }

@@ -15,8 +15,9 @@ import javax.annotation.Resource;
  * @since 2021/6/21
  */
 @RestController
-@CrossOrigin
+@CrossOrigin()
 @RequestMapping("/cipher")
+@Api(tags = "密码")
 public class CipherController {
     @Resource
     private CipherService cipherService;
